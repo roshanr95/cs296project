@@ -24,7 +24,7 @@ DOCDIR = $(PROJECT_ROOT)/doc
 
 # Library Paths
 BOX2D_ROOT=$(EXTERNAL_ROOT)
-GLUI_ROOT=/usr
+GLUI_ROOT=/usr/local
 GL_ROOT=/usr/include/
 
 #Libraries

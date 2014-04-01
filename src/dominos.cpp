@@ -248,14 +248,6 @@ namespace cs296
           box3->CreateFixture(fd1);
       
 
-          /*! Variable -  bs4
-           *  \n \brief The shape and position of the bar
-           *  \n Data type -  b2PolygonShape
-           */
-          b2PolygonShape bs3;
-          bs3.SetAsBox(0.5,4, b2Vec2(0.f,-1.9f), 0);
-          fd1->shape = &bs3;
-          
           //The bar4
           bd->position.Set(-5,34);
           bd->fixedRotation = false;
@@ -266,7 +258,7 @@ namespace cs296
            * \n Values - side fd1
            */
           b2Body* box4 = m_world->CreateBody(bd);
-          box3->CreateFixture(fd1);
+          box4->CreateFixture(fd1);
        
        
           b2RevoluteJointDef *revoluteJointDef = new b2RevoluteJointDef;
@@ -294,7 +286,7 @@ namespace cs296
           //revoluteJointDef->enableLimit = true;
           //revoluteJointDef->lowerAngle = -0.8 ;
    		  //revoluteJointDef->upperAngle =  0.8 ;
-          revoluteJointDef2->Initialize(box1, box, box1->GetWorldCenter()+worldAnchorOnBody4);    
+          revoluteJointDef2->Initialize(box1, box4, box1->GetWorldCenter()+worldAnchorOnBody4);    
           m_world->CreateJoint(revoluteJointDef2);
 
           // The pulley joint
@@ -321,8 +313,8 @@ namespace cs296
           myjoint2->Initialize(box4, box2, worldAnchorGround1, worldAnchorGround2, box4->GetWorldCenter()+worldAnchorOnBody1, box2->GetWorldCenter(), ratio);
           m_world->CreateJoint(myjoint2);
           
-         for(int i=0;i<100;i++)
-         box2->ApplyForceToCenter( b2Vec2(0.0f,400.0f),  true );
+         for(int i=0;i<400;i++)
+         box2->ApplyForceToCenter( b2Vec2(0.0f,1000.0f),  true );
    
    }
       
