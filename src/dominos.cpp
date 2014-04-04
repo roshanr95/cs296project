@@ -461,6 +461,7 @@
 
     b2FixtureDef rectFixtureDef;
     rectFixtureDef.shape = &rectShape1;
+    rectFixtureDef.density = 0.1f;
     rectFixtureDef.filter.groupIndex = -1;
     doorRect1->CreateFixture(&rectFixtureDef);
 
@@ -502,7 +503,7 @@
         // b2Body* doorRect3 = m_world->CreateBody(&rectBodyDef3);
 
         b2PolygonShape rectShape3;
-        rectShape3.SetAsBox(5,0.2,b2Vec2(-5,-2.5), 0);
+        rectShape3.SetAsBox(10,0.2,b2Vec2(-10,-2.5), 0);
 
         b2FixtureDef rectFixtureDef3;
         rectFixtureDef3.shape = &rectShape3;
@@ -535,6 +536,7 @@
 
         b2FixtureDef doorMainRodFixtureDef;
         doorMainRodFixtureDef.shape = &doorMainRodShape;
+        doorMainRodFixtureDef.density = 0.1f;
         doorMainRodFixtureDef.filter.groupIndex = -1;
         doorMainRod->CreateFixture(&doorMainRodFixtureDef);
 
@@ -555,7 +557,12 @@
         rodToRodJointDef.localAnchorA.Set(-10,-2.5);
         rodToRodJointDef.localAnchorB.Set(0,0);
         m_world->CreateJoint(&rodToRodJointDef);
+
+        doorMainRod->SetTransform(b2Vec2(-5,21.5), 0.5);
     }
+
+    // doorRect1->SetTransform(centreCircle->GetPosition(), 1);
+    // centreCircle->SetTransform(centreCircle->GetPosition(), 1);
 
     centreCircle->ApplyAngularImpulse(-1000.0f,true);
 
