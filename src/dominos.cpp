@@ -491,6 +491,9 @@
     circleToWorldJointDef.bodyA = centreCircle;
     circleToWorldJointDef.bodyB = mount;
     circleToWorldJointDef.collideConnected = false;
+    circleToWorldJointDef.enableMotor = true;
+    circleToWorldJointDef.maxMotorTorque = 1000;
+    circleToWorldJointDef.motorSpeed = 1;
 
     circleToWorldJointDef.localAnchorA.Set(0,0);
     circleToWorldJointDef.localAnchorB.Set(0,15);
@@ -559,13 +562,28 @@
         m_world->CreateJoint(&rodToRodJointDef);
 
         doorMainRod->SetTransform(b2Vec2(-5,21.5), 0.5);
+    
+        b2BodyDef doorBodyDef;
+        doorBodyDef.type = b2_dynamicBody;
+        doorBodyDef.position.Set(-5,10);
+        b2Body *doorBody = m_world->CreateBody(&doorBodyDef);
+
+        b2PolygonShape doorBodyShape;
+        doorBodyShape.SetAsBox(5,10,b2Vec2(0,0),0);
+
+        b2FixtureDef doorBodyFixtureDef;
+        doorBodyFixtureDef.shape = &doorBodyShape;
+        doorBodyFixtureDef.density = 0.1f;
+        doorBodyFixtureDef.filter.groupIndex = -1;
+        doorBody->CreateFixture(&doorBodyFixtureDef);
+
+        b2WheelJointDef mainRodToDoorJoint;
+        mainRodToDoorJoint.Initialize(doorBody, doorMainRod, doorMainRod->GetPosition()+b2Vec2(0,-10), b2Vec2(0,1));
+        m_world->CreateJoint(&mainRodToDoorJoint);
     }
 
     // doorRect1->SetTransform(centreCircle->GetPosition(), 1);
     // centreCircle->SetTransform(centreCircle->GetPosition(), 1);
-
-    centreCircle->ApplyAngularImpulse(-1000.0f,true);
-
 
 }     
      
