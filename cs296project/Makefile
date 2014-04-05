@@ -10,6 +10,7 @@ CAT	= cat
 PRINTF	= printf
 SED	= sed
 DOXYGEN = doxygen
+CMAKE = cmake
 ######################################
 # Project Name (generate executable with this name)
 TARGET = cs296_base
@@ -57,14 +58,26 @@ INCS := $(wildcard $(SRCDIR)/*.hpp)
 OBJS := $(SRCS:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
 
 
-.PHONY: all setup doc clean distclean
+.PHONY: install setup doc clean distclean
 
-all: setup $(BINDIR)/$(TARGET)
+install: setup $(BINDIR)/$(TARGET)
+
+dist: distclean 
+	@tar -cvzf ../cs296_g05_project.tar.gz ../cs296project 
 
 setup:
 	@$(ECHO) "Setting up compilation..."
-	@mkdir -p obj
-	@mkdir -p bin
+	@mkdir -p $(OBJDIR)
+	@mkdir -p $(BINDIR)
+	@if test -d $(EXTERNAL_ROOT)/src/Box2D/build_296; \
+	then $(ECHO) ""; \
+	else tar xvzf $(EXTERNAL_ROOT)/src/Box2D.tgz -C $(EXTERNAL_ROOT)/src	\
+	&& mkdir -p $(EXTERNAL_ROOT)/src/Box2D/build_296; \
+	fi;
+	@cd $(EXTERNAL_ROOT)/src/Box2D/build_296/ \
+	&& $(CMAKE) ../ \
+	&& make \
+	&& make install;
 
 $(BINDIR)/$(TARGET): $(OBJS)
 	@$(PRINTF) "$(MESG_COLOR)Building executable:$(NO_COLOR) $(FILE_COLOR) %16s$(NO_COLOR)" "$(notdir $@)"
@@ -103,3 +116,6 @@ clean:
 
 distclean: clean
 	@$(RM) -rf $(BINDIR) $(DOCDIR)/html
+	@$(RM) -rf $(EXTERNAL_ROOT)/include/*
+	@$(RM) -rf $(EXTERNAL_ROOT)/lib/*
+	@$(RM) -rf $(EXTERNAL_ROOT)/src/Box2D
