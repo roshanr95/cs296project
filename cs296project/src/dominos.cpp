@@ -41,13 +41,27 @@
   #include "callbacks.hpp"
 
    namespace cs296
-   {
+   {/*! Variables - box1 , box2 , doorRect1
+				 * \n \brief bodies for elevator box ,  equilising box and door1 respectively
+				 
+				 * \n Data Type - b2Body
+				 */
 
     b2Body* box1;
     b2Body* box2;
     b2Body* doorRect1;
+    
+    /*! Variables - temp
+	* \n Data Type - b2WeldJointDef
+     */
     b2WeldJointDef* temp = new b2WeldJointDef;
+    /*! Variables - prismaticJoint
+	* \n Data Type - b2PrismaticJoint
+     */
     b2PrismaticJoint* prismaticJoint;
+    /*! Variables - circleToWorldJoint
+	* \n Data Type - b2RevoluteJoint
+     */
     b2RevoluteJoint* circleToWorldJoint;
      /**  The is the constructor \n
      * This is the documentation block for the constructor.
@@ -82,12 +96,12 @@
 
     }
 
-    {
+    {   /// \par ELEVATOR BOX
 
-			/*! Variable -  bd
-             *  \n \brief A body definition of a pulley wheel
+			      /*! Variable -  bd
+             *  \n \brief A body definition of elevator box
              *  \n Data type -  b2FixtureDef*
-             *  \n Values - fixed rotation
+             *  \n Values - fixed rotation,position= (0,30)
              */
              b2BodyDef *bd = new b2BodyDef;
              bd->type = b2_dynamicBody;
@@ -95,9 +109,9 @@
              bd->fixedRotation = true;
 
             /*! Variable -  fd1
-             *  \n \brief The bar that is attached to the pulleys , size=2*0.2
+             *  \n \brief fixture for elevator box
              *  \n Data type -  b2FixtureDef*
-             *  \n Values - density = 20f, friction = 0.5f, restitution = 0f
+             *  \n Values - friction = 0.0f, restitution = 0f
              */
              b2FixtureDef *fd1 = new b2FixtureDef;
              fd1->friction = 0.0f;
@@ -105,22 +119,22 @@
              fd1->shape = new b2PolygonShape;
 
             /*! Variable -  bs1
-             *  \n \brief The shape and position of the bar 
+             *  \n \brief The shape and position of the elevator box
              *  \n Data type -  b2PolygonShape
              */
              b2PolygonShape bs1;
              bs1.SetAsBox(7,5, b2Vec2(0.f,0.f), 0);
              fd1->shape = &bs1;
 
-            //The bar1
+            
              bd->position.Set(0,25);
              fd1->density =  0.1;
              fd1->filter.groupIndex = -1;
 
             /*! Variable -  box1
-             * \n \brief The bar at one end of the system , size=4*0.4
+             * \n \brief The Elevator Box
              * \n Data type -  b2Body*
-             * \n Values - side fd1
+             * \n Values - fixture fd1
              */
              box1 = m_world->CreateBody(bd);
              box1->CreateFixture(fd1);
@@ -128,43 +142,94 @@
 
 
              {
+				 /*! Variable - centerCircleDef
+				  * \n \brief body definition of center circle
+				  * \n Values - position=(0,32)
+				  * Data type - b2BodyDef
+				  */ 
+				 
                b2BodyDef centerCircleDef;
                centerCircleDef.type = b2_dynamicBody;
                centerCircleDef.position.Set(0,32);
                b2Body* centreCircle = m_world->CreateBody(&centerCircleDef);
-
+				
+				/*! Variable - circleShape
+				 * \n \brief shape for center circle
+				 * \n Values - position=(0,0)
+				 * \n Data Type - b2CircleShape
+				 */
+				
                b2CircleShape circleShape;
                circleShape.m_p.Set(0, 0); 
                circleShape.m_radius = 1.5f; 
+               
+               /*! Variable - centerCircleFixtureDef
+				 * \n \brief fixture for center circle
+				 * \n Values - density=1.0f 
+				 * \n Data Type - b2FixtureDef
+				 */
 
                b2FixtureDef centerCircleFixtureDef;
                centerCircleFixtureDef.shape = &circleShape;
                centerCircleFixtureDef.density = 1.0f;
                centerCircleFixtureDef.filter.groupIndex = -1;
                centreCircle->CreateFixture(&centerCircleFixtureDef);
+               
+               /*! Variable - rectBodyDef1
+				 * \n \brief Body definition for door
+				 * \n Values - position=(1,31)
+				 * \n Data Type - b2BodyDef
+				 */
+               
 
                b2BodyDef rectBodyDef1;
                rectBodyDef1.type = b2_dynamicBody;
                rectBodyDef1.position.Set(1,31);
                doorRect1 = m_world->CreateBody(&rectBodyDef1);
+               
+               /*! Variable - rectShape1
+				 * \n \brief shape for door1
+				 * \n Values - length=0.2 , height =1 ,  position= (0,0) , angle = 0
+				 * \n Data Type - b2PolgonShape
+				 */
 
                b2PolygonShape rectShape1;
                rectShape1.SetAsBox(0.2,1,b2Vec2(0,0), 0);
+               
+               /*! Variable - rectFixtureDef
+				 * \n \brief fixture for door1
+				 * \n Values - density=0.1f , 
+				 * \n Data Type - b2CircleShape
+				 */
 
                b2FixtureDef rectFixtureDef;
                rectFixtureDef.shape = &rectShape1;
                rectFixtureDef.density = 0.1f;
                rectFixtureDef.filter.groupIndex = -1;
                doorRect1->CreateFixture(&rectFixtureDef);
+               
+               /*! Variable - rodJointDef1
+				 * \n \brief revolute joint between door and center circle
+				 * \n Values - collide connect = false
+				 * \n Data Type - b2RevoluteJointDef
+				 */
 
                b2RevoluteJointDef rodJointDef1;
                rodJointDef1.bodyA = centreCircle;
                rodJointDef1.bodyB = doorRect1;
                rodJointDef1.collideConnected = false;
+               
+               
 
                rodJointDef1.localAnchorA.Set(1,0);
                rodJointDef1.localAnchorB.Set(0,1);
                m_world->CreateJoint(&rodJointDef1);
+               
+               /*! Variable - circleToWorldJointDef
+				 * \n \brief revolute joint between center circle and elevator box
+				 * \n Values - enable motor , collide connect , max motor torque , motor speed
+				 * \n Data Type - b2CircleShape
+				 */
 
                b2RevoluteJointDef circleToWorldJointDef;
                circleToWorldJointDef.bodyA = centreCircle;
@@ -183,9 +248,21 @@
         // rectBodyDef3.type = b2_dynamicBody;
         // rectBodyDef3.position.Set(-2.5,25.5);
         // b2Body* doorRect3 = m_world->CreateBody(&rectBodyDef3);
-
+                 
+                 /*! Variable - rectShape3
+				 * \n \brief shape for door1
+				 * \n Values - position=(-2,5,-1) length=2.5 height=0.2
+				 * \n Data Type - b2CircleShape
+				 */
+                 
                 b2PolygonShape rectShape3;
                 rectShape3.SetAsBox(2.5,0.2,b2Vec2(-2.5,-1), 0);
+                
+                /*! Variable - rectFixtureDef3
+				 * \n \brief fixture for door1
+				 * \n Values - 
+				 * \n Data Type - b2CircleShape
+				 */
 
                 b2FixtureDef rectFixtureDef3;
                 rectFixtureDef3.shape = &rectShape3;
@@ -203,19 +280,44 @@
             }
 
             {
+				
+				/*! Variable - doorMainRodDef
+				 * \n \brief body definition for door main rod
+				 * \n Values - position=(-4,29.5)
+				 * \n Data Type - b2BodyDef
+				 */
+				
                 b2BodyDef doorMainRodDef;
                 doorMainRodDef.type = b2_dynamicBody;
                 doorMainRodDef.position.Set(-4,29.5);
                 b2Body *doorMainRod = m_world->CreateBody(&doorMainRodDef);
+                
+                /*! Variable - doorMainRodShape
+				 * \n \brief shape for door Main Rod
+				 * \n Values - length=0.3 height=2.5 position=(0,0)
+				 * \n Data Type - b2PolygonShape
+				 */
 
                 b2PolygonShape doorMainRodShape;
                 doorMainRodShape.SetAsBox(0.3,2.5,b2Vec2(0,0),0);
+                
+                /*! Variable - doorMainRodFixtureDef
+				 * \n \brief fixture for door main rod
+				 * \n Values - density = 0.1f 
+				 * \n Data Type - b2FixtureDef
+				 */
 
                 b2FixtureDef doorMainRodFixtureDef;
                 doorMainRodFixtureDef.shape = &doorMainRodShape;
                 doorMainRodFixtureDef.density = 0.1f;
                 doorMainRodFixtureDef.filter.groupIndex = -1;
                 doorMainRod->CreateFixture(&doorMainRodFixtureDef);
+                
+                /*! Variable - rodToWorldDef
+				 * \n \brief Revolute joint between elevator box and door main rod
+				 * \n Values - collide connect = false
+				 * \n Data Type - b2RevoluteJointDef
+				 */
 
                 b2RevoluteJointDef rodToWorldJointDef;
                 rodToWorldJointDef.bodyA = box1;
@@ -225,6 +327,12 @@
                 rodToWorldJointDef.localAnchorA.Set(-4,7);
                 rodToWorldJointDef.localAnchorB.Set(0,2.5);
                 m_world->CreateJoint(&rodToWorldJointDef);
+                
+                /*! Variable - rodToRodJointDef
+				 * \n \brief Revolute joint between door1 and door main rod
+				 * \n Values - collide connect = false
+				 * \n Data Type - b2RevoluteJointDef
+				 */
 
                 b2RevoluteJointDef rodToRodJointDef;
                 rodToRodJointDef.bodyA = doorRect1;
@@ -234,21 +342,45 @@
                 rodToRodJointDef.localAnchorA.Set(-3.5,-1);
                 rodToRodJointDef.localAnchorB.Set(0,0);
                 m_world->CreateJoint(&rodToRodJointDef);
+                
+                /*! Variable - doorBodyDef
+				 * \n \brief body definition for door
+				 * \n Values - position=(2,24)
+				 * \n Data Type - b2BodyDef
+				 */
 
 
                 b2BodyDef doorBodyDef;
                 doorBodyDef.type = b2_dynamicBody;
                 doorBodyDef.position.Set(2,24);
                 b2Body *doorBody = m_world->CreateBody(&doorBodyDef);
+                
+                /*! Variable - doorBodyShape
+				 * \n \brief shape for door
+				 * \n Values - length = 2 , height = 4 , position = (0,0) 
+				 * \n Data Type - b2PolygonShape
+				 */
 
                 b2PolygonShape doorBodyShape;
                 doorBodyShape.SetAsBox(2,4,b2Vec2(0,0),0);
+                
+                /*! Variable - doorBodyFixtureDef
+				 * \n \brief fixture for door
+				 * \n Values - density = 0.1f 
+				 * \n Data Type - b2FixtureDef
+				 */
 
                 b2FixtureDef doorBodyFixtureDef;
                 doorBodyFixtureDef.shape = &doorBodyShape;
                 doorBodyFixtureDef.density = 0.1f;
                 doorBodyFixtureDef.filter.groupIndex = -1;
                 doorBody->CreateFixture(&doorBodyFixtureDef);
+                
+                /*! Variable - doorTBoxJoint
+				 * \n \brief prismatic joint between elevator box and door
+				 * \n Values - collide connect = false , local axis = (1,0)
+				 * \n Data Type - b2PrismaticJointDef
+				 */
 
                 b2PrismaticJointDef doorToBoxJoint;
                 doorToBoxJoint.bodyA = box1;
@@ -259,6 +391,11 @@
                 doorToBoxJoint.localAnchorA.Set(0,-5);
                 doorToBoxJoint.localAnchorB.Set(0,-4);
                 m_world->CreateJoint(&doorToBoxJoint);
+
+					/*! Variable - mainRodToDoorJoint
+				 * \n \brief wheel joint between door and door main rod
+					* \n Data Type - b2WheelJointDef
+				 */
 
                 b2WheelJointDef mainRodToDoorJoint;
                 mainRodToDoorJoint.Initialize(doorBody, doorMainRod, doorMainRod->GetPosition()+b2Vec2(0,-2), b2Vec2(0,1));
@@ -273,16 +410,29 @@
 
         }
 
-        {
-            /// \par 1.SHELF
-            /*! Creates a shelf \n
-             *  b2EdgeShape shape is modified and assigned to ground
-             */
+        { /// \par FRAMES AND EQUILISING BOX
+           /*! Variable - shape
+            * \n \brief shape for frames
+            * \n Values - position=(0.5f , 10.0f)
+            * Data Type = b2PolygonShape
+            */ 
              b2PolygonShape shape;
              shape.SetAsBox(0.5f, 10.f);
+             
+             /*! Variable - bd1
+            * \n \brief bode definition for frame1( at bottom right position )
+            * \n Values - position=(7.5f , 10.0f)
+            * Data Type = b2BodyDef
+            */ 
 
              b2BodyDef bd1;
              bd1.position.Set(7.5f, 10.0f);
+             
+             /*! Variable - fd2
+            * \n \brief fixture for ground1
+            * \n Values - density = 5.0 friction = 0.0f , restitution = 0.0f
+            * Data Type = b2FixtureDef
+            */ 
 
              b2FixtureDef *fd2 = new b2FixtureDef;
              fd2->density = 5.0;
@@ -290,40 +440,63 @@
              fd2->restitution = 0.f;
              fd2->shape = &shape;
 
-            /*! Variable -  ground
-             *  \n \brief A ground line , size=12.0*0.5
-             *  \n Data type - b2EdgeShape
+            /*! Variable -  ground1
+             \n \brief body for frame1
+             *  \n Data type - b2Body
              */
              b2Body* ground1 = m_world->CreateBody(&bd1);
              ground1->CreateFixture(fd2);
 
+             /*! Variable - bd2
+            * \n \brief body defintion for frame2 (at top right position)
+            * \n Values - position=(7.5f , 38.0f)
+            * Data Type = b2BodyDef
+            */ 
              b2BodyDef bd2;
              bd2.position.Set(7.5f, 38.0f);
 
-            /*! Variable -  ground
-             *  \n \brief A ground line , size=12.0*0.5
-             *  \n Data type - b2EdgeShape
+            /*! Variable -  ground2
+             \n \brief body for frame2
+             *  \n Data type - b2Body
              */
              b2Body* ground2 = m_world->CreateBody(&bd2);
              ground2->CreateFixture(fd2);
 
+				/*! Variable - bd3
+            * \n \brief body definition for frame3(at bottom left position)
+            * \n Values - position=(-7.5f , 10.0f)
+            * Data Type = b2BodyDef
+            */ 
+
              b2BodyDef bd3;
              bd3.position.Set(-7.5f, 10.0f);
-            /*! Variable -  ground
-             *  \n \brief A ground line for the horizontal shelf , size=14.0*0.5
-             *  \n Data type - b2EdgeShape
+            /*! Variable -  ground3
+            \n \brief body for frame3
+             *  \n Data type - b2Body
              */
              b2Body* ground3 = m_world->CreateBody(&bd3);
              ground3->CreateFixture(fd2);
+             
+             /*! Variable - bd4
+            * \n \brief body definition for frame4(at top left position)
+            * \n Values - position=(-7.5f , 38.0f)
+            * Data Type = b2BodyDef
+            */ 
 
              b2BodyDef bd4;
              bd4.position.Set(-7.5f, 38.0f);
-            /*! Variable -  ground
-             *  \n \brief A ground line , size=12.0*0.5
-             *  \n Data type - b2EdgeShape
+            /*! Variable -  ground4
+             \n \brief body for frame4
+             *  \n Data type - b2Body
              */
              b2Body* ground4 = m_world->CreateBody(&bd4);
              ground4->CreateFixture(fd2);
+             
+             /*! Variable - prismaticJointDef
+            * \n \brief prismatic joint between frame3 and elevator box
+            
+            * Data Type = b2PrismaticJointDef
+            */ 
 
              b2PrismaticJointDef* prismaticJointDef = new b2PrismaticJointDef;
              prismaticJointDef->bodyB = ground3;
@@ -332,7 +505,7 @@
              prismaticJointDef->localAxisA.Set(0,1);
             prismaticJointDef->localAnchorB.Set( 0.5,6);//a little outside the bottom right corner
             prismaticJointDef->localAnchorA.Set(-7,-5);//bottom left corner
-  		    prismaticJointDef->enableMotor = false;//5 units per second in positive axis direction
+  		      prismaticJointDef->enableMotor = false;//5 units per second in positive axis direction
             prismaticJointDef->maxMotorForce = 100000.;
             prismaticJointDef->motorSpeed = 5.;
             prismaticJointDef->enableLimit = true;
@@ -347,6 +520,12 @@
             prismaticJointDef->localAnchorB.Set(-7,5);//bottom left corner
             prismaticJointDef->enableMotor = false;//5 units per second in positive axis direction       
             m_world->CreateJoint(prismaticJointDef);
+
+			/*! Variable - prismaticJointDef2
+            * \n \brief prismatic joint between elevator box and frame1
+            
+            * Data Type = b2PrismaticJointDef
+            */ 
 
             b2PrismaticJointDef* prismaticJointDef2 = new b2PrismaticJointDef;
             prismaticJointDef2->bodyA = ground1;
@@ -372,15 +551,11 @@
 
 
         {
-          /// \par 2. PULLEY
-          /*! Creates the second, new pulley system \n
-           * The box on the see-saw is caught by a bar on one end of the pulley \n
-           * The bar on the other end catces a revolving platform
-           */
+          
 
 
             /*! Variable -  bs2
-             *  \n \brief The shape and position of the bar
+             *  \n \brief The shape and position of the equilising box
              *  \n Data type -  b2PolygonShape
              */
              b2PolygonShape bs2;
@@ -392,16 +567,16 @@
              fd1->density = 25.0f;
 
             /*! Variable -  box2
-             * \n \brief The bar at the other end of the system , siz=4*0.4
+             * \n \brief the equilising box
              * \n Data type -  b2Body*
-             * \n Values - side fd1
+             
              */
              box2 = m_world->CreateBody(bd);
              b2Fixture* weights = box2->CreateFixture(fd1);
 
 
             /*! Variable -  bs3
-             *  \n \brief The shape and position of the bar
+             *  \n \brief The shape and position of box3
              *  \n Data type -  b2PolygonShape
              */
              b2PolygonShape bs3;
@@ -413,7 +588,7 @@
              bd->fixedRotation = false;
              fd1->density = 1.0;
             /*! Variable -  box3
-             * \n \brief The bar at the other end of the system , siz=4*0.4
+             \n \brief safety latch1
              * \n Data type -  b2Body*
              * \n Values - side fd1
              */
@@ -422,17 +597,12 @@
 	          //  m_world->registerPhysicsConnector(new PhysicsConnector(box1, box3, true, true));        
 
 
-            /*! Variable -  bs4
-             *  \n \brief The shape and position of the bar
-             *  \n Data type -  b2PolygonShape
-             */
-
             //The bar4
              bd->position.Set(-6,32);
              bd->fixedRotation = false;
              fd1->density = 1.0;
             /*! Variable -  box4
-             * \n \brief The bar at the other end of the system , siz=4*0.4
+             \n \brief safety latch2
              * \n Data type -  b2Body*
              * \n Values - side fd1
              */
@@ -440,7 +610,12 @@
              box4->CreateFixture(fd1);
             //  m_world->registerPhysicsConnector(new PhysicsConnector(box1, box3, true, true));  
 
-
+			/*! Variable -  revoluteJointDef
+             \n \brief revolute joint between elevator and safety latch 1
+             * \n Data type -  b2RevoluteJoint
+             * \n Values - side fd1
+             */
+             
              b2RevoluteJointDef *revoluteJointDef = new b2RevoluteJointDef;
              revoluteJointDef->bodyA = box1;
              revoluteJointDef->bodyB = box3;
@@ -457,6 +632,12 @@
      	      //revoluteJointDef->upperAngle =  3.14/2 ;
             //revoluteJointDef->Initialize(box1, box3, box1->GetWorldCenter()+worldAnchorOnBody3);    
              m_world->CreateJoint(revoluteJointDef);
+             
+             /*! Variable -  revoluteJointDef2
+             \n \brief revolute joint between elevator box and safety latch2
+             * \n Data type -  b2RevoluteJoint
+             * \n Values - side fd1
+             */
 
              b2RevoluteJointDef *revoluteJointDef2 = new b2RevoluteJointDef;
              revoluteJointDef2->bodyA = box1;
@@ -477,7 +658,7 @@
 
             // The pulley joint
             /*! Variable -  myjoint
-             * \n \brief The pulley joint with two anchors
+             * \n \brief The pulley joint between safety latch1 and equilising box
              * \n Data type -   b2PulleyJointDef*
              * \n Values - anchors = twoanchors on bodies worldAnchorOnBody1 and worldAnchorOnBody2, \n
              *                      two anchors on ground worldAnchorGround1 and worldAnchorGround2, ratio
@@ -494,7 +675,7 @@
             m_world->CreateJoint(myjoint);
 
             b2PulleyJointDef* myjoint2 = new b2PulleyJointDef();
-            /*! The pulley joint myjoint is initialised with all the input values - box1, box2, ratio, anchors
+            /*! The pulley joint myjoint is re-initialised with all the input values - equilising box and safety latch 2, ratio, anchors
              */
             myjoint2->Initialize(box4, box2, worldAnchorGround1, worldAnchorGround2, box4->GetWorldCenter()+worldAnchorOnBody1, box2->GetWorldCenter(), ratio);
             m_world->CreateJoint(myjoint2);
@@ -507,6 +688,10 @@
 
 float32 min = 100.;
 b2WeldJoint *tempJoint;
+
+/*! Function - Keyboard
+             \n \brief to control keyboard events
+             */
 void dominos_t::keyboard(unsigned char key) 
 {   
   if(key == 'd'){    
