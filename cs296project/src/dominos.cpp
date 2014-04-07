@@ -66,6 +66,8 @@
      /**  The is the constructor \n
      * This is the documentation block for the constructor.
      */ 
+    b2RevoluteJoint* safetyLatchJoint1;
+    b2RevoluteJoint* safetyLatchJoint2;
      dominos_t::dominos_t()
      {
 
@@ -438,6 +440,7 @@
              fd2->density = 5.0;
              fd2->friction = 0.0f;
              fd2->restitution = 0.f;
+             fd2->filter.groupIndex = -1;
              fd2->shape = &shape;
 
             /*! Variable -  ground1
@@ -572,7 +575,7 @@
              
              */
              box2 = m_world->CreateBody(bd);
-             b2Fixture* weights = box2->CreateFixture(fd1);
+             box2->CreateFixture(fd1);
 
 
             /*! Variable -  bs3
@@ -626,7 +629,7 @@
              revoluteJointDef->referenceAngle = 0;
              revoluteJointDef->enableMotor = true;
              revoluteJointDef->maxMotorTorque = 800;
-             revoluteJointDef->motorSpeed = -5*3.14;
+             revoluteJointDef->motorSpeed = 0;
              revoluteJointDef->enableLimit = true;
              revoluteJointDef->lowerAngle = -3.14/4 ;
      	      //revoluteJointDef->upperAngle =  3.14/2 ;
@@ -649,7 +652,7 @@
              revoluteJointDef2->referenceAngle = 0;
              revoluteJointDef2->enableMotor = true;
              revoluteJointDef2->maxMotorTorque = 800;
-             revoluteJointDef2->motorSpeed = 5*3.14;
+             revoluteJointDef2->motorSpeed = 0;
              revoluteJointDef2->enableLimit = true;
             //revoluteJointDef2->lowerAngle = -3.14/4 ;
              revoluteJointDef2->upperAngle =  3.14/4 ;
@@ -680,6 +683,134 @@
             myjoint2->Initialize(box4, box2, worldAnchorGround1, worldAnchorGround2, box4->GetWorldCenter()+worldAnchorOnBody1, box2->GetWorldCenter(), ratio);
             m_world->CreateJoint(myjoint2);
 
+        }
+
+        {
+            b2BodyDef safetyLatchDef1;
+            safetyLatchDef1.type = b2_dynamicBody;
+            safetyLatchDef1.position.Set(6.5,27);
+            b2Body *safetyLatch1 = m_world->CreateBody(&safetyLatchDef1);
+
+            b2Vec2 vertices[3];
+            vertices[0].Set(0.0f, 0.0f);
+            vertices[1].Set(2.0f, -4.0f);
+            vertices[2].Set(0.0f, -2.0f);
+            int32 count = 3;
+            b2PolygonShape safetyLatchShape1;
+            safetyLatchShape1.Set(vertices, count);
+
+            b2FixtureDef safetyLatchFixture1;
+            safetyLatchFixture1.shape = &safetyLatchShape1;
+            safetyLatchFixture1.density = 0.1f;
+            safetyLatchFixture1.filter.groupIndex = -1;
+            safetyLatch1->CreateFixture(&safetyLatchFixture1);
+
+            safetyLatch1->SetTransform(b2Vec2(6.5,27),-0.5);
+
+            b2RevoluteJointDef safetyLatchJointDef1;
+            safetyLatchJointDef1.bodyB = box1;
+            safetyLatchJointDef1.bodyA = safetyLatch1;
+            safetyLatchJointDef1.collideConnected = false;
+            safetyLatchJointDef1.localAnchorB.Set(6.5,2);
+            safetyLatchJointDef1.localAnchorA.Set(0,0);
+            safetyLatchJointDef1.enableMotor = true;
+            safetyLatchJointDef1.maxMotorTorque = 100000.;
+            safetyLatchJointDef1.motorSpeed = 0;
+            safetyLatchJointDef1.enableLimit = true;
+            safetyLatchJointDef1.lowerAngle = 0;
+            safetyLatchJointDef1.upperAngle = 0.5;
+            safetyLatchJoint1 = (b2RevoluteJoint *)m_world->CreateJoint(&safetyLatchJointDef1);
+        }
+
+        {
+            b2BodyDef safetyLatchDef2;
+            safetyLatchDef2.type = b2_dynamicBody;
+            safetyLatchDef2.position.Set(-6.5,27);
+            b2Body *safetyLatch2 = m_world->CreateBody(&safetyLatchDef2);
+
+            b2Vec2 vertices[3];
+            vertices[0].Set(0.0f, 0.0f);
+            vertices[1].Set(-2.0f, -4.0f);
+            vertices[2].Set(0.0f, -2.0f);
+            int32 count = 3;
+            b2PolygonShape safetyLatchShape2;
+            safetyLatchShape2.Set(vertices, count);
+
+            b2FixtureDef safetyLatchFixture2;
+            safetyLatchFixture2.shape = &safetyLatchShape2;
+            safetyLatchFixture2.density = 0.1f;
+            safetyLatchFixture2.filter.groupIndex = -1;
+            safetyLatch2->CreateFixture(&safetyLatchFixture2);
+
+            safetyLatch2->SetTransform(b2Vec2(-6.5,27),0.5);
+
+            b2RevoluteJointDef safetyLatchJointDef2;
+            safetyLatchJointDef2.bodyB = box1;
+            safetyLatchJointDef2.bodyA = safetyLatch2;
+            safetyLatchJointDef2.collideConnected = false;
+            safetyLatchJointDef2.localAnchorB.Set(-6.5,2);
+            safetyLatchJointDef2.localAnchorA.Set(0,0);
+            safetyLatchJointDef2.enableMotor = true;
+            safetyLatchJointDef2.maxMotorTorque = 100000.;
+            safetyLatchJointDef2.motorSpeed = 0;
+            safetyLatchJointDef2.enableLimit = true;
+            safetyLatchJointDef2.lowerAngle = -0.5;
+            safetyLatchJointDef2.upperAngle = 0;
+            safetyLatchJoint2 = (b2RevoluteJoint *)m_world->CreateJoint(&safetyLatchJointDef2);
+        }
+
+        {
+            b2BodyDef spikesRightDef;
+            spikesRightDef.type = b2_staticBody;
+            spikesRightDef.position.Set(7.5,0);
+            b2Body *spikesRight = m_world->CreateBody(&spikesRightDef);
+
+            b2Vec2 vertices[3];
+            vertices[0].Set(1.0f, 0.0f);
+            vertices[1].Set(0.0f, 2.0f);
+            vertices[2].Set(1.0f, 1.0f);
+            int32 count = 3;
+            b2PolygonShape spikeRightShape;
+            spikeRightShape.Set(vertices, count);
+
+            for(int i=0; i<40; i++) {
+                b2FixtureDef spikeRightFixture;
+                spikeRightFixture.shape = &spikeRightShape;
+                spikeRightFixture.density = 0.1f;
+                spikeRightFixture.filter.groupIndex = 0;
+                spikesRight->CreateFixture(&spikeRightFixture);
+                vertices[0] += b2Vec2(0,1);
+                vertices[1] += b2Vec2(0,1);
+                vertices[2] += b2Vec2(0,1);
+                spikeRightShape.Set(vertices, count);
+            }
+        }
+
+        {
+            b2BodyDef spikesLeftDef;
+            spikesLeftDef.type = b2_staticBody;
+            spikesLeftDef.position.Set(-7.5,0);
+            b2Body *spikesLeft = m_world->CreateBody(&spikesLeftDef);
+
+            b2Vec2 vertices[3];
+            vertices[0].Set(-1.0f, 0.0f);
+            vertices[1].Set(0.0f, 2.0f);
+            vertices[2].Set(-1.0f, 1.0f);
+            int32 count = 3;
+            b2PolygonShape spikeLeftShape;
+            spikeLeftShape.Set(vertices, count);
+
+            for(int i=0; i<40; i++) {
+                b2FixtureDef spikeLeftFixture;
+                spikeLeftFixture.shape = &spikeLeftShape;
+                spikeLeftFixture.density = 0.1f;
+                spikeLeftFixture.filter.groupIndex = 0;
+                spikesLeft->CreateFixture(&spikeLeftFixture);
+                vertices[0] += b2Vec2(0,1);
+                vertices[1] += b2Vec2(0,1);
+                vertices[2] += b2Vec2(0,1);
+                spikeLeftShape.Set(vertices, count);
+            }
         }
 
     }
@@ -729,9 +860,13 @@ else if(key == 'l'){
 }
 
 else if(key == 'c'){
-  circleToWorldJoint->SetMotorSpeed(0);
+    prismaticJoint->EnableMotor(false);
+    circleToWorldJoint->SetMotorSpeed(0);
     box1->SetType(b2_dynamicBody);  
-    box2->GetWorld()->DestroyBody(box2);  
+    box2->GetWorld()->DestroyBody(box2); 
+
+  safetyLatchJoint1->SetMotorSpeed(-1); 
+  safetyLatchJoint2->SetMotorSpeed(1); 
 }
 
 }       
