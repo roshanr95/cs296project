@@ -785,58 +785,7 @@
               myjoint2->Initialize(box4, box2, worldAnchorGround1, worldAnchorGround2, box4->GetWorldCenter()+worldAnchorOnBody1, box2->GetWorldCenter(), ratio);
               m_world->CreateJoint(myjoint2);
 
-                /*! Variable - centerCircleDef
-                 * \n \brief body definition of center circle
-                 * \n Values - position=(0,32)
-                 * Data type - b2BodyDef
-                 */ 
-                 b2BodyDef centerCircleDef;
-                 centerCircleDef.type = b2_dynamicBody;
-                 centerCircleDef.position.Set(-28.5,40.5);
-                 b2Body* centreCircle = m_world->CreateBody(&centerCircleDef);
-                 centerCircleDef.type = b2_staticBody;       
-                 b2Body* nail = m_world->CreateBody(&centerCircleDef);
-
-                /*! Variable - circleShape
-                 * \n \brief shape for center circle
-                 * \n Values - position=(0,0)
-                 * \n Data Type - b2CircleShape
-                 */
-                 b2CircleShape circleShape;
-                 circleShape.m_p.Set(0, 0); 
-                 circleShape.m_radius = 1.5f; 
-                 
-                /*! Variable - centerCircleFixtureDef
-                 * \n \brief fixture for center circle
-                 * \n Values - density=1.0f 
-                 * \n Data Type - b2FixtureDef
-                 */
-                 b2FixtureDef centerCircleFixtureDef;
-                 centerCircleFixtureDef.shape = &circleShape;
-                 centerCircleFixtureDef.density = 1.0f;
-                 centreCircle->CreateFixture(&centerCircleFixtureDef);
-
-                 circleShape.m_radius = 1.f;
-                 centerCircleFixtureDef.shape = &circleShape;
-                 nail->CreateFixture(&centerCircleFixtureDef);
-
-                 /*! Variable - circleToWorldJointDef
-                  * \n \brief revolute joint between center circle and elevator box
-                  * \n Values - enable motor , collide connect , max motor torque , motor speed
-                  * \n Data Type - b2CircleShape
-                  */
-                 b2RevoluteJointDef circleToWorldJointDef;
-                 circleToWorldJointDef.bodyA = centreCircle;
-                 circleToWorldJointDef.bodyB = nail;
-                 circleToWorldJointDef.collideConnected = false;
-                 circleToWorldJointDef.enableMotor = true;
-                 circleToWorldJointDef.maxMotorTorque = 1000;
-                 circleToWorldJointDef.motorSpeed = 0;
-
-                 circleToWorldJointDef.localAnchorA.Set(0,0);
-                 circleToWorldJointDef.localAnchorB.Set(0,0);
-                 b2RevoluteJoint* circleToWorldJoint2 = (b2RevoluteJoint *)m_world->CreateJoint(&circleToWorldJointDef);
-
+               
           }
 
           {
@@ -1011,6 +960,113 @@
 
         }
 
+        {      
+              /*! Variable - centerCircleDef
+               * \n \brief body definition of center circle
+               * \n Values - position=(0,32)
+               * Data type - b2BodyDef
+               */ 
+               b2BodyDef centerCircleDef;
+               centerCircleDef.type = b2_dynamicBody;
+               centerCircleDef.position.Set(-2,-2);
+               b2Body* centreCircle = m_world->CreateBody(&centerCircleDef);
+               centerCircleDef.type = b2_staticBody;       
+               b2Body* nail = m_world->CreateBody(&centerCircleDef);
+
+              /*! Variable - circleShape
+               * \n \brief shape for center circle
+               * \n Values - position=(0,0)
+               * \n Data Type - b2CircleShape
+               */
+               b2CircleShape circleShape;
+               circleShape.m_p.Set(0, 0); 
+               circleShape.m_radius = 1.5f; 
+               
+              /*! Variable - centerCircleFixtureDef
+               * \n \brief fixture for center circle
+               * \n Values - density=1.0f 
+               * \n Data Type - b2FixtureDef
+               */
+               b2FixtureDef centerCircleFixtureDef;
+               centerCircleFixtureDef.shape = &circleShape;
+               centerCircleFixtureDef.density = 1.0f;
+               centreCircle->CreateFixture(&centerCircleFixtureDef);
+
+               circleShape.m_radius = 1.f;
+               centerCircleFixtureDef.shape = &circleShape;
+               nail->CreateFixture(&centerCircleFixtureDef);
+
+               /*! Variable - circleToWorldJointDef
+                * \n \brief revolute joint between center circle and elevator box
+                * \n Values - enable motor , collide connect , max motor torque , motor speed
+                * \n Data Type - b2CircleShape
+                */
+               b2RevoluteJointDef circleToWorldJointDef;
+               circleToWorldJointDef.bodyA = centreCircle;
+               circleToWorldJointDef.bodyB = nail;
+               circleToWorldJointDef.collideConnected = false;
+               circleToWorldJointDef.enableMotor = true;
+               circleToWorldJointDef.maxMotorTorque = 1000;
+               circleToWorldJointDef.motorSpeed = 0;
+
+               circleToWorldJointDef.localAnchorA.Set(0,0);
+               circleToWorldJointDef.localAnchorB.Set(0,0);
+               b2RevoluteJoint* circleToWorldJoint2 = (b2RevoluteJoint *)m_world->CreateJoint(&circleToWorldJointDef);
+          }       
+
+          {      
+              /*! Variable - centerCircleDef
+               * \n \brief body definition of center circle
+               * \n Values - position=(0,32)
+               * Data type - b2BodyDef
+               */ 
+               b2BodyDef centerCircleDef;
+               centerCircleDef.type = b2_dynamicBody;
+               centerCircleDef.position.Set(-28,-2);
+               b2Body* centreCircle = m_world->CreateBody(&centerCircleDef);
+               centerCircleDef.type = b2_staticBody;       
+               b2Body* nail = m_world->CreateBody(&centerCircleDef);
+
+              /*! Variable - circleShape
+               * \n \brief shape for center circle
+               * \n Values - position=(0,0)
+               * \n Data Type - b2CircleShape
+               */
+               b2CircleShape circleShape;
+               circleShape.m_p.Set(0, 0); 
+               circleShape.m_radius = 1.5f; 
+               
+              /*! Variable - centerCircleFixtureDef
+               * \n \brief fixture for center circle
+               * \n Values - density=1.0f 
+               * \n Data Type - b2FixtureDef
+               */
+               b2FixtureDef centerCircleFixtureDef;
+               centerCircleFixtureDef.shape = &circleShape;
+               centerCircleFixtureDef.density = 1.0f;
+               centreCircle->CreateFixture(&centerCircleFixtureDef);
+
+               circleShape.m_radius = 1.f;
+               centerCircleFixtureDef.shape = &circleShape;
+               nail->CreateFixture(&centerCircleFixtureDef);
+
+               /*! Variable - circleToWorldJointDef
+                * \n \brief revolute joint between center circle and elevator box
+                * \n Values - enable motor , collide connect , max motor torque , motor speed
+                * \n Data Type - b2CircleShape
+                */
+               b2RevoluteJointDef circleToWorldJointDef;
+               circleToWorldJointDef.bodyA = centreCircle;
+               circleToWorldJointDef.bodyB = nail;
+               circleToWorldJointDef.collideConnected = false;
+               circleToWorldJointDef.enableMotor = true;
+               circleToWorldJointDef.maxMotorTorque = 1000;
+               circleToWorldJointDef.motorSpeed = 0;
+
+               circleToWorldJointDef.localAnchorA.Set(0,0);
+               circleToWorldJointDef.localAnchorB.Set(0,0);
+               b2RevoluteJoint* circleToWorldJoint2 = (b2RevoluteJoint *)m_world->CreateJoint(&circleToWorldJointDef);
+          }       
       }
 
   }  
