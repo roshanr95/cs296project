@@ -193,7 +193,7 @@ void debug_draw_t::DrawString(int x, int y, const char *string, ...)
 }
 
 
-void debug_draw_t::DrawMyString(const char *string, ...)
+void debug_draw_t::DrawMyString(const char *string, const char *string1, const char *string2, const char *string3, ...)
 {
 	char buffer[128];
 

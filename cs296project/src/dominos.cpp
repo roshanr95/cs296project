@@ -68,10 +68,15 @@
           /*! b2EdgeShape shape is assigned to the b1 pointer
            */
               b2EdgeShape shape; 
-              shape.Set(b2Vec2(-90.0f, 0.0f), b2Vec2(90.0f, 0.0f));
+              shape.Set(b2Vec2(-90.0f, 0.0f), b2Vec2(-32.0f, 0.0f));
               b2BodyDef bd; 
               b1 = m_world->CreateBody(&bd); 
               b1->CreateFixture(&shape, 0.0f);
+              shape.Set(b2Vec2(-28.0f, 0.0f), b2Vec2(-5.0f, 0.0f));
+              b1->CreateFixture(&shape, 0.0f);
+              shape.Set(b2Vec2(5.0f, 0.0f), b2Vec2(90.0f, 0.0f));
+              b1->CreateFixture(&shape, 0.0f);
+
           }
 
       }
@@ -516,7 +521,7 @@
 
               //The bar2
                bd->position.Set(-30,10);
-               fd1->density = 25.0f;
+               fd1->density = 50.0f;
 
               /*! Variable -  box2
                * \n \brief the equilising box
@@ -780,6 +785,58 @@
               myjoint2->Initialize(box4, box2, worldAnchorGround1, worldAnchorGround2, box4->GetWorldCenter()+worldAnchorOnBody1, box2->GetWorldCenter(), ratio);
               m_world->CreateJoint(myjoint2);
 
+                /*! Variable - centerCircleDef
+                 * \n \brief body definition of center circle
+                 * \n Values - position=(0,32)
+                 * Data type - b2BodyDef
+                 */ 
+                 b2BodyDef centerCircleDef;
+                 centerCircleDef.type = b2_dynamicBody;
+                 centerCircleDef.position.Set(-28.5,40.5);
+                 b2Body* centreCircle = m_world->CreateBody(&centerCircleDef);
+                 centerCircleDef.type = b2_staticBody;       
+                 b2Body* nail = m_world->CreateBody(&centerCircleDef);
+
+                /*! Variable - circleShape
+                 * \n \brief shape for center circle
+                 * \n Values - position=(0,0)
+                 * \n Data Type - b2CircleShape
+                 */
+                 b2CircleShape circleShape;
+                 circleShape.m_p.Set(0, 0); 
+                 circleShape.m_radius = 1.5f; 
+                 
+                /*! Variable - centerCircleFixtureDef
+                 * \n \brief fixture for center circle
+                 * \n Values - density=1.0f 
+                 * \n Data Type - b2FixtureDef
+                 */
+                 b2FixtureDef centerCircleFixtureDef;
+                 centerCircleFixtureDef.shape = &circleShape;
+                 centerCircleFixtureDef.density = 1.0f;
+                 centreCircle->CreateFixture(&centerCircleFixtureDef);
+
+                 circleShape.m_radius = 1.f;
+                 centerCircleFixtureDef.shape = &circleShape;
+                 nail->CreateFixture(&centerCircleFixtureDef);
+
+                 /*! Variable - circleToWorldJointDef
+                  * \n \brief revolute joint between center circle and elevator box
+                  * \n Values - enable motor , collide connect , max motor torque , motor speed
+                  * \n Data Type - b2CircleShape
+                  */
+                 b2RevoluteJointDef circleToWorldJointDef;
+                 circleToWorldJointDef.bodyA = centreCircle;
+                 circleToWorldJointDef.bodyB = nail;
+                 circleToWorldJointDef.collideConnected = false;
+                 circleToWorldJointDef.enableMotor = true;
+                 circleToWorldJointDef.maxMotorTorque = 1000;
+                 circleToWorldJointDef.motorSpeed = 0;
+
+                 circleToWorldJointDef.localAnchorA.Set(0,0);
+                 circleToWorldJointDef.localAnchorB.Set(0,0);
+                 b2RevoluteJoint* circleToWorldJoint2 = (b2RevoluteJoint *)m_world->CreateJoint(&circleToWorldJointDef);
+
           }
 
           {
@@ -838,6 +895,122 @@
             }
         }
 
+        {
+
+            b2PolygonShape bar;
+            bar.SetAsBox(0.2,0.5);
+            b2BodyDef* bodyDef = new b2BodyDef();
+            bodyDef->type = b2_dynamicBody;
+            // initial body
+            bodyDef->position.x=-30;
+            bodyDef->position.y=1;
+            b2FixtureDef* boxDef = new b2FixtureDef();
+            boxDef->shape=&bar;
+            boxDef->density=1;
+            boxDef->friction=0.5;
+            boxDef->restitution=0.2;
+            b2Body* body=m_world->CreateBody(bodyDef);
+            body->CreateFixture(boxDef);
+            b2Body * link = body;
+
+            b2WeldJointDef* weld_joint = new b2WeldJointDef;
+            weld_joint->Initialize(box2, body, b2Vec2(-30, 1.5));
+            m_world->CreateJoint(weld_joint); 
+
+           for (int i = 1; i <= 3; i++) {
+                // rope segment
+                b2BodyDef* bodyDef = new b2BodyDef();
+                bodyDef->type = b2_dynamicBody;
+                bodyDef->position.x=-30;
+                bodyDef->position.y=1-i;
+                b2FixtureDef* boxDef = new b2FixtureDef();
+                boxDef->shape=&bar;
+                boxDef->density=1;
+                boxDef->friction=0.5;
+                boxDef->restitution=0.2;
+                b2Body* body=m_world->CreateBody(bodyDef);
+                body->CreateFixture(boxDef);
+                // joint
+                b2RevoluteJointDef* revolute_joint = new b2RevoluteJointDef;
+                revolute_joint->Initialize(link, body, b2Vec2(-30, 1-i+0.5));
+                m_world->CreateJoint(revolute_joint);
+                // saving the reference of the last placed link
+                link=body;
+            }
+
+            // final body
+
+            bodyDef->position.x=-30;
+            bodyDef->position.y=-3;
+            b2Body* body2 = m_world->CreateBody(bodyDef);
+            body2->CreateFixture(boxDef);
+            b2RevoluteJointDef* revolute_joint = new b2RevoluteJointDef;
+            revolute_joint->Initialize(link, body2, b2Vec2(-30, -2.5));
+            m_world->CreateJoint(revolute_joint);
+
+            link = body2;
+            bar.SetAsBox(0.5,0.2);  
+
+            for (int i = 1; i <= 29; i++) {
+                // rope segment
+                b2BodyDef* bodyDef = new b2BodyDef();
+                bodyDef->type = b2_dynamicBody;
+                bodyDef->position.x=-30+i-0.5;
+                bodyDef->position.y=-3;
+                b2FixtureDef* boxDef = new b2FixtureDef();
+                boxDef->shape=&bar;
+                boxDef->density=1;
+                boxDef->friction=0.5;
+                boxDef->restitution=0.2;
+                b2Body* body=m_world->CreateBody(bodyDef);
+                body->CreateFixture(boxDef);
+                // joint
+                b2RevoluteJointDef* revolute_joint = new b2RevoluteJointDef;
+                revolute_joint->Initialize(link, body, b2Vec2(-30-1+i, -3));
+                m_world->CreateJoint(revolute_joint);
+                // saving the reference of the last placed link
+                link=body;
+            }
+
+             // final body
+            bodyDef->position.x=-0.5;
+            bodyDef->position.y=-3;
+            b2Body* body3 = m_world->CreateBody(bodyDef);
+            boxDef->shape=&bar;
+            body3->CreateFixture(boxDef);
+            revolute_joint->Initialize(link, body3, b2Vec2(-1, -3));
+            m_world->CreateJoint(revolute_joint);
+
+            link = body3;
+            bar.SetAsBox(0.2,0.5);  
+
+            for (int i = 1; i <= 23; i++) {
+                // rope segment
+                b2BodyDef* bodyDef = new b2BodyDef();
+                bodyDef->type = b2_dynamicBody;
+                bodyDef->position.x=0;
+                bodyDef->position.y=-3+0.5+i-1;
+                b2FixtureDef* boxDef = new b2FixtureDef();
+                boxDef->shape=&bar;
+                boxDef->density=1;
+                boxDef->friction=0.5;
+                boxDef->restitution=0.2;
+                b2Body* body=m_world->CreateBody(bodyDef);
+                body->CreateFixture(boxDef);
+                // joint
+                b2RevoluteJointDef* revolute_joint = new b2RevoluteJointDef;
+                revolute_joint->Initialize(link, body, b2Vec2(0, -3 +i -1));
+                m_world->CreateJoint(revolute_joint);
+                // saving the reference of the last placed link
+                link=body;
+            }
+
+             // final body
+            weld_joint->Initialize(box1, link, b2Vec2(0, 20));
+            m_world->CreateJoint(weld_joint); 
+
+        }
+
       }
 
   }  
@@ -852,20 +1025,21 @@ void dominos_t::keyboard(unsigned char key)
 {   
 
 if(key == 'd'){    
-  circleToWorldJoint->SetMotorSpeed(0);
-  if((box1->GetPosition()).y > 10) box1->SetType(b2_dynamicBody);   
-  prismaticJoint->SetMotorSpeed(5);
-  prismaticJoint->EnableMotor(true);
-
+  if(doorBody->GetWorldCenter().x > 0.85){
+    circleToWorldJoint->SetMotorSpeed(0);
+    if((box1->GetPosition()).y > 10) box1->SetType(b2_dynamicBody);   
+    prismaticJoint->SetMotorSpeed(5);
+    prismaticJoint->EnableMotor(true);
   }
+}
 
 else if(key == 'a'){    
-
-  if((box1->GetPosition()).y < 25) box1->SetType(b2_dynamicBody);   
-  circleToWorldJoint->SetMotorSpeed(0);
-  prismaticJoint->SetMotorSpeed(-5);
-  prismaticJoint->EnableMotor(true);
-  
+  if(doorBody->GetWorldCenter().x > 0.85){
+    if((box1->GetPosition()).y < 25) box1->SetType(b2_dynamicBody);   
+    circleToWorldJoint->SetMotorSpeed(0);
+    prismaticJoint->SetMotorSpeed(-5);
+    prismaticJoint->EnableMotor(true);
+  }
 }
 
 else if(key == 'c'){
@@ -876,20 +1050,14 @@ else if(key == 'c'){
 }
 
 else if(key == 'l'){    
-  start = true;
-  circleToWorldJoint->SetMotorSpeed(0.5);
-    if((box1->GetWorldCenter()).y >= 25){
-      box1->SetType(b2_staticBody);  
-  }
-
-  if((box1->GetWorldCenter()).y <= 10){
-      box1->SetType(b2_staticBody);  
-  }
-
-  prismaticJoint->EnableMotor(false);
-
-  if(tempJoint!=0) {
-    m_world->DestroyJoint(tempJoint);
+  if(((box1->GetWorldCenter()).y >= 25) || ((box1->GetWorldCenter()).y <= 10)){
+    start = true;
+    circleToWorldJoint->SetMotorSpeed(0.5);
+    box1->SetType(b2_staticBody);  
+    prismaticJoint->EnableMotor(false);
+    if(tempJoint!=0) {
+      m_world->DestroyJoint(tempJoint);
+    }
   }
 
 }   

@@ -51,7 +51,7 @@ public:
   
   void DrawString(int x, int y, const char* string, ...); 
 
-  void DrawMyString(const char* string, ...); 
+  void DrawMyString(const char *string, const char *string1, const char *string2, const char *string3, ...);
   
   void DrawAABB(b2AABB* aabb, const b2Color& color);
 };
