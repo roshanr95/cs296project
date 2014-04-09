@@ -192,6 +192,38 @@ void debug_draw_t::DrawString(int x, int y, const char *string, ...)
 	glMatrixMode(GL_MODELVIEW);
 }
 
+
+void debug_draw_t::DrawMyString(const char *string, ...)
+{
+	char buffer[128];
+
+	va_list arg;
+	va_start(arg, string);
+	vsprintf(buffer, string, arg);
+	va_end(arg);
+
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	int w = glutGet(GLUT_WINDOW_WIDTH);
+	int h = glutGet(GLUT_WINDOW_HEIGHT);
+	gluOrtho2D(0, w, h, 0);
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+
+	glColor3f(0.9f, 0.6f, 0.6f);
+	int32 length = (int32)strlen(buffer);
+	for (int32 i = 0; i < length; ++i)
+	{
+		glutBitmapCharacter(GLUT_BITMAP_8_BY_13, buffer[i]);
+	}
+	glPopMatrix();
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+}
+
 void debug_draw_t::DrawAABB(b2AABB* aabb, const b2Color& c)
 {
 	glColor3f(c.r, c.g, c.b);

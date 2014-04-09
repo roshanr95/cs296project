@@ -40,6 +40,34 @@ namespace cs296
       return new dominos_t;
     }
   };
+
+     /*! Variables - box1 , box2 , doorBody1
+      * \n \brief bodies for elevator box ,  equalising box and door1 respectively
+      * \n Data Type - b2Body
+      */
+      b2Body* box1;
+      b2Body* box2;
+      
+      /*! Variables - temp
+       * \n Data Type - b2WeldJointDef
+       */
+      b2WeldJointDef* temp = new b2WeldJointDef;
+      /*! Variables - b2PrismaticJoint
+       * \n Data Type - b2PrismaticJoint
+       */
+      b2PrismaticJoint* prismaticJoint;
+
+      b2RevoluteJoint* safetyLatchJoint1;
+      b2RevoluteJoint* safetyLatchJoint2;
+   
 }
+
+      b2Body *doorBody; 
+      /*! Variables - circleToWorldJoint
+       * \n Data Type - b2RevoluteJoint
+       */
+      b2RevoluteJoint* circleToWorldJoint;
+      bool start;
+
   
 #endif
