@@ -44,7 +44,9 @@
 
      {
 
-       /* The is the constructor \n
+	  b2Body * link;
+
+      /* The is the constructor \n
        * This is the documentation block for the constructor.
        */ 
        dominos_t::dominos_t()
@@ -59,22 +61,58 @@
            */
            b2Body* b1;
 
-          /*! Variable - shape
-           *  \n \brief defines a shape that can be assigned to a body
-           *  \n Data type - b2EdgeShape
-           */
-
            {
-          /*! b2EdgeShape shape is assigned to the b1 pointer
-           */
+			  /*! Variable - shape
+			   *  \n \brief defines a shape that can be assigned to a body
+			   *  \n Data type - b2EdgeShape
+			   */
+			  /*! b2EdgeShape2 shape is assigned to the b1 pointer
+			   */
               b2EdgeShape shape2; 
               shape2.Set(b2Vec2(-90.0f, 0.0f), b2Vec2(-32.0f, 0.0f));
-              b2BodyDef bd; 
+              b2BodyDef bd;  
+                
               b1 = m_world->CreateBody(&bd); 
               b1->CreateFixture(&shape2, 0.0f);
+              /*! 
+               * floor at position = (-28.0f, 0.0f) to (-2.0f, 0.0f)
+               */ 
               shape2.Set(b2Vec2(-28.0f, 0.0f), b2Vec2(-2.0f, 0.0f));
               b1->CreateFixture(&shape2, 0.0f);
+              /*!  floor at position
+               * = (-28.0f, 0.0f) to (-2.0f, 0.0f)
+               */ 
               shape2.Set(b2Vec2(2.0f, 0.0f), b2Vec2(90.0f, 0.0f));
+              b1->CreateFixture(&shape2, 0.0f);
+              /*!  floor at
+               * position =(10.0f, 20.0f) to (90.0f, 20.0f)
+               */ 
+              shape2.Set(b2Vec2(10.0f, 20.0f), b2Vec2(90.0f, 20.0f));
+              b1->CreateFixture(&shape2, 0.0f);
+              /*! floor at 
+               * position =(10.0f, 3.0f) to (90.0f, 3.0f)
+               */ 
+              shape2.Set(b2Vec2(10.0f, 3.0f), b2Vec2(90.0f, 3.0f));
+              b1->CreateFixture(&shape2, 0.0f);
+              /*! floor at 
+               * position =(10.0f, 37.0f) to (90.0f, 37.0f)
+               */ 
+              shape2.Set(b2Vec2(10.0f, 37.0f), b2Vec2(90.0f, 37.0f));
+              b1->CreateFixture(&shape2, 0.0f);
+              /*! floor at 
+               * position =(90.0f, 20.0f) to (-35.0f, 20.0f)
+               */ 
+              shape2.Set(b2Vec2(-90.0f, 20.0f), b2Vec2(-35.0f, 20.0f));
+              b1->CreateFixture(&shape2, 0.0f);
+              /*! floor at 
+               * position =(-90.0f, 3.0f) to (-35.0f, 3.0f)
+               */ 
+              shape2.Set(b2Vec2(-90.0f, 3.0f), b2Vec2(-35.0f, 3.0f));
+              b1->CreateFixture(&shape2, 0.0f);
+              /*! floor at 
+               * position =(-90.0f, 37.0f) to (-35.0f, 37.0f)
+               */ 
+              shape2.Set(b2Vec2(-90.0f, 37.0f), b2Vec2(-35.0f, 37.0f));
               b1->CreateFixture(&shape2, 0.0f);
 
               /*! Variable - shape
@@ -86,15 +124,15 @@
                shape.SetAsBox(0.2f, 1.f);
                
                /*! Variable - bd1
-                * \n \brief bode definition for frame1( at bottom right position )
-                * \n Values - position=(7.5f , 10.0f)
+                * \n \brief bode definition for pipe1( at bottom right position )
+                * \n Values - position=(-31.5f , 0.0f)
                 * Data Type = b2BodyDef
                 */ 
                b2BodyDef bd1;
                bd1.position.Set(-31.5f, 0.0f);
                
                /*! Variable - fd2
-                * \n \brief fixture for ground1
+                * \n \brief fixture for pipe1
                 * \n Values - density = 5.0 friction = 0.0f , restitution = 0.0f
                 * Data Type = b2FixtureDef
                 */ 
@@ -105,37 +143,17 @@
                fd2->shape = &shape;
 
               /*! Variable -  ground1
-               *  \n \brief body for frame1
+               *  \n \brief pipe for chain
                *  \n Data type - b2Body
                */
                b2Body* ground1 = m_world->CreateBody(&bd1);
                ground1->CreateFixture(fd2);
 
-              //  b2BodyDef bd2;
-              //  bd2.position.Set(-28.5f, 0.0f);
-
-              // /*! Variable -  ground2
-              //  *  \n \brief body for frame1
-              //  *  \n Data type - b2Body
-              //  */
-              //  b2Body* ground2 = m_world->CreateBody(&bd2);
-              //  ground2->CreateFixture(fd2);
-
-              //  b2BodyDef bd3;
-              //  bd3.position.Set(-1.5f, 0.0f);
-
-              // ! Variable -  ground2
-              //  *  \n \brief body for frame1
-              //  *  \n Data type - b2Body
-               
-              //  b2Body* ground3 = m_world->CreateBody(&bd3);
-              //  ground3->CreateFixture(fd2);
-
                b2BodyDef bd4;
                bd4.position.Set(1.5f, 0.0f);
 
               /*! Variable -  ground2
-               *  \n \brief body for frame1
+               *  \n \brief pipe for chain
                *  \n Data type - b2Body
                */
                b2Body* ground4 = m_world->CreateBody(&bd4);
@@ -190,7 +208,8 @@
                fd1->filter.groupIndex = 0;
 
 
-               {
+               { /// \par ELEVATOR DOORS
+				   
                 /*! Variable - centerCircleDef
                  * \n \brief body definition of center circle
                  * \n Values - position=(0,32)
@@ -432,10 +451,9 @@
 
               }
 
-
           }
 
-          { /// \par FRAMES AND EQUILISING BOX
+          { /// \par FRAMES 
 
               /*! Variable - shape
                * \n \brief shape for frames
@@ -526,9 +544,9 @@
                prismaticJointDef->bodyA = box1;
                prismaticJointDef->collideConnected = false;
                prismaticJointDef->localAxisA.Set(0,1);
-               prismaticJointDef->localAnchorB.Set( 0.5,0);//a little outside the bottom right corner
-               prismaticJointDef->localAnchorA.Set(-7,-5);//bottom left corner
-               prismaticJointDef->enableMotor = false;//5 units per second in positive axis direction
+               prismaticJointDef->localAnchorB.Set( 0.5,0);
+               prismaticJointDef->localAnchorA.Set(-7,-5);
+               prismaticJointDef->enableMotor = false;
                prismaticJointDef->maxMotorForce = 100000.;
                prismaticJointDef->motorSpeed = 5.;
                prismaticJointDef->enableLimit = true;
@@ -540,9 +558,9 @@
                prismaticJointDef->bodyB = box1;
                prismaticJointDef->collideConnected = false;
                prismaticJointDef->localAxisA.Set(0,1);
-               prismaticJointDef->localAnchorA.Set( 0.5,0);//a little outside the bottom right corner
-               prismaticJointDef->localAnchorB.Set(-7,5);//bottom left corner
-               prismaticJointDef->enableMotor = false;//5 units per second in positive axis direction   
+               prismaticJointDef->localAnchorA.Set( 0.5,0);
+               prismaticJointDef->localAnchorB.Set(-7,5);
+               prismaticJointDef->enableMotor = false;  
                prismaticJointDef->enableLimit = false;    
                m_world->CreateJoint(prismaticJointDef);
 
@@ -555,25 +573,23 @@
               prismaticJointDef2->bodyB = box1;
               prismaticJointDef2->collideConnected = false;
               prismaticJointDef2->localAxisA.Set(0,1);
-              prismaticJointDef2->localAnchorA.Set(-0.5,0);//a little outside the bottom right corner
-              prismaticJointDef2->localAnchorB.Set(7,-5);//bottom left corner
+              prismaticJointDef2->localAnchorA.Set(-0.5,0);
+              prismaticJointDef2->localAnchorB.Set(7,-5);
               m_world->CreateJoint(prismaticJointDef2);
 
               prismaticJointDef2->bodyA = ground2;
               prismaticJointDef2->bodyB = box1;
               prismaticJointDef2->collideConnected = false;
               prismaticJointDef2->localAxisA.Set(0,1);
-              prismaticJointDef2->localAnchorA.Set( -0.5,0);//a little outside the bottom right corner
-              prismaticJointDef2->localAnchorB.Set(7,5);//bottom left corner
-              prismaticJointDef2->enableMotor = false;//5 units per second in positive axis direction       
+              prismaticJointDef2->localAnchorA.Set( -0.5,0);
+              prismaticJointDef2->localAnchorB.Set(7,5);
+              prismaticJointDef2->enableMotor = false;    
               m_world->CreateJoint(prismaticJointDef2);
 
           }
 
 
-
-
-          {
+          { /// \par PULLEY 
             
               /*! Variable -  bs2
                *  \n \brief The shape and position of the equilising box
@@ -608,10 +624,9 @@
                fd1->density = 5.0;
                fd1->filter.groupIndex = -1;
 
-               /// \par FRAMES AND EQUILISING BOX
 
               /*! Variable - shape
-               * \n \brief shape for frames
+               * \n \brief shape for frames of counterweight
                * \n Values - position=(0.5f , 10.0f)
                * Data Type = b2PolygonShape
                */ 
@@ -699,9 +714,9 @@
                prismaticJointDef->bodyA = box2;
                prismaticJointDef->collideConnected = false;
                prismaticJointDef->localAxisA.Set(0,1);
-               prismaticJointDef->localAnchorB.Set( 0.5,0);//a little outside the bottom right corner
-               prismaticJointDef->localAnchorA.Set(-3.5,-5);//bottom left corner
-               prismaticJointDef->enableMotor = false;//5 units per second in positive axis direction
+               prismaticJointDef->localAnchorB.Set( 0.5,0);
+               prismaticJointDef->localAnchorA.Set(-3.5,-5);
+               prismaticJointDef->enableMotor = false;
                prismaticJointDef->maxMotorForce = 100000.;
                prismaticJointDef->motorSpeed = 5.;
                prismaticJointDef->enableLimit = true;
@@ -713,9 +728,9 @@
                prismaticJointDef->bodyB = box2;
                prismaticJointDef->collideConnected = false;
                prismaticJointDef->localAxisA.Set(0,1);
-               prismaticJointDef->localAnchorA.Set( 0.5,0);//a little outside the bottom right corner
-               prismaticJointDef->localAnchorB.Set(-3.5,5);//bottom left corner
-               prismaticJointDef->enableMotor = false;//5 units per second in positive axis direction   
+               prismaticJointDef->localAnchorA.Set( 0.5,0);
+               prismaticJointDef->localAnchorB.Set(-3.5,5);
+               prismaticJointDef->enableMotor = false; 
                prismaticJointDef->enableLimit = false;    
                m_world->CreateJoint(prismaticJointDef);
 
@@ -728,17 +743,17 @@
               prismaticJointDef2->bodyB = box2;
               prismaticJointDef2->collideConnected = false;
               prismaticJointDef2->localAxisA.Set(0,1);
-              prismaticJointDef2->localAnchorA.Set(-0.5,0);//a little outside the bottom right corner
-              prismaticJointDef2->localAnchorB.Set(3.5,-5);//bottom left corner
+              prismaticJointDef2->localAnchorA.Set(-0.5,0);
+              prismaticJointDef2->localAnchorB.Set(3.5,-5);
               m_world->CreateJoint(prismaticJointDef2);
 
               prismaticJointDef2->bodyA = ground2;
               prismaticJointDef2->bodyB = box2;
               prismaticJointDef2->collideConnected = false;
               prismaticJointDef2->localAxisA.Set(0,1);
-              prismaticJointDef2->localAnchorA.Set( -0.5,0);//a little outside the bottom right corner
-              prismaticJointDef2->localAnchorB.Set(3.5,5);//bottom left corner
-              prismaticJointDef2->enableMotor = false;//5 units per second in positive axis direction       
+              prismaticJointDef2->localAnchorA.Set( -0.5,0);
+              prismaticJointDef2->localAnchorB.Set(3.5,5);
+              prismaticJointDef2->enableMotor = false;    
               m_world->CreateJoint(prismaticJointDef2);
 
               /*! Variable -  box3
@@ -764,7 +779,6 @@
                safetyLatchFixture2.restitution = 0.f;
                box3->CreateFixture(&safetyLatchFixture2); 
 
-              //The bar4
                bd->position.Set(-6,32);
                bd->fixedRotation = false;
                fd1->density = 5.0;
@@ -852,11 +866,21 @@
                
           }
 
-          {
+          { /// \par SPIKES
+          
+			/*! Variable - spikesRightDef
+			 * \n \brief body defintion for right spikes  in the frame
+			 * \n Data type - b2BodyDef
+			 */ 
             b2BodyDef spikesRightDef;
             spikesRightDef.type = b2_staticBody;
             spikesRightDef.position.Set(9,0);
             b2Body *spikesRight = m_world->CreateBody(&spikesRightDef);
+            
+            /*! Variable - vertices(array)
+             * \n \brief keeps track of position of right spikes
+             * \n Data type - b2Vec2
+             */ 
 
             b2Vec2 vertices[3];
             vertices[0].Set(1.0f, 0.0f);
@@ -880,11 +904,21 @@
             }
         }
 
-        {
+        {   /// \par SPIKES
+          
+			/*! Variable - spikesLeftDef
+			 * \n \brief body defintion for left spikes  in the frame
+			 * \n Data type - b2BodyDef
+			 */ 
             b2BodyDef spikesLeftDef;
             spikesLeftDef.type = b2_staticBody;
             spikesLeftDef.position.Set(-9,0);
             b2Body *spikesLeft = m_world->CreateBody(&spikesLeftDef);
+            
+            /*! Variable - vertices(array)
+             * \n \brief keeps track of position of left spikes
+             * \n Data type - b2Vec2
+             */ 
 
             b2Vec2 vertices[3];
             vertices[0].Set(-1.0f, 0.0f);
@@ -907,11 +941,22 @@
                 spikeLeftShape.Set(vertices, count);
             }
         }
+        
+        {/// \par CHAIN	
 
-        {
-
+			
+            /*! Variable - bar
+             * \n \brief shape of the segment of the chain attached to the elevator at the bottom
+             * \n Values - length = 0.3 , height = 0.5 
+             * \n Data type - b2PolygonShape
+             */
             b2PolygonShape bar;
-            bar.SetAsBox(0.3,0.5);
+            bar.SetAsBox(0.2,0.5);
+            
+            /*! Variable - bodyDef
+             * \n \brief body definition for body (link between elevator box and chain)
+             * \n Values - position = (-30,1) , density = 1, friction = 0.5 , restitution = 0.2
+             */ 
             b2BodyDef* bodyDef = new b2BodyDef();
             bodyDef->type = b2_dynamicBody;
             // initial body
@@ -919,13 +964,22 @@
             bodyDef->position.y=1;
             b2FixtureDef* boxDef = new b2FixtureDef();
             boxDef->shape=&bar;
-            boxDef->density=1;
+            boxDef->density=5;
             boxDef->friction=0.5;
             boxDef->restitution=0.2;
+            
+            /*! Variable - body
+             * \n \brief link between elevator bax and chain
+             * \n Data Type - b2Body
+             */ 
             b2Body* body=m_world->CreateBody(bodyDef);
             body->CreateFixture(boxDef);
-            b2Body * link = body;
+            link = body;
 
+		    /*! Variable - weld_joint
+             * \n \brief joint between equilising box  and link(body)
+             * \n Data type = b2WeldJointDef
+             */ 	
             b2WeldJointDef* weld_joint = new b2WeldJointDef;
             weld_joint->Initialize(box2, body, b2Vec2(-30, 1.5));
             m_world->CreateJoint(weld_joint); 
@@ -938,7 +992,7 @@
                 bodyDef->position.y=1-i;
                 b2FixtureDef* boxDef = new b2FixtureDef();
                 boxDef->shape=&bar;
-                boxDef->density=1;
+                boxDef->density=5;
                 boxDef->friction=0.5;
                 boxDef->restitution=0.2;
                 b2Body* body=m_world->CreateBody(bodyDef);
@@ -955,6 +1009,10 @@
 
             bodyDef->position.x=-30;
             bodyDef->position.y=-1;
+            /*! Variable - body2
+             * \n \brief intermediate link of chain
+             * \n Data type b2Body
+             */ 
             b2Body* body2 = m_world->CreateBody(bodyDef);
             body2->CreateFixture(boxDef);
             b2RevoluteJointDef* revolute_joint = new b2RevoluteJointDef;
@@ -962,7 +1020,7 @@
             m_world->CreateJoint(revolute_joint);
 
             link = body2;
-            bar.SetAsBox(0.5,0.3);  
+            bar.SetAsBox(0.5,0.2);  
 
             for (int i = 1; i <= 29; i++) {
                 // rope segment
@@ -972,7 +1030,7 @@
                 bodyDef->position.y=-1;
                 b2FixtureDef* boxDef = new b2FixtureDef();
                 boxDef->shape=&bar;
-                boxDef->density=1;
+                boxDef->density=5;
                 boxDef->friction=0.5;
                 boxDef->restitution=0.2;
                 b2Body* body=m_world->CreateBody(bodyDef);
@@ -988,14 +1046,22 @@
              // final body
             bodyDef->position.x=-0.5;
             bodyDef->position.y=-1;
+            /*! Variable - body3
+             * \n \brief 2nd intermediate link in chain
+             * \n Data type - b2Body
+             */ 
             b2Body* body3 = m_world->CreateBody(bodyDef);
             boxDef->shape=&bar;
             body3->CreateFixture(boxDef);
+            /*! Variable - revolute_joint
+             * \n \brief joint between links of chain
+             * \n Data type - b2RevoluteJoint
+             */ 
             revolute_joint->Initialize(link, body3, b2Vec2(-1, -1));
             m_world->CreateJoint(revolute_joint);
 
             link = body3;
-            bar.SetAsBox(0.3,0.5);  
+            bar.SetAsBox(0.2,0.5);  
 
             for (int i = 1; i <= 21; i++) {
                 // rope segment
@@ -1005,7 +1071,7 @@
                 bodyDef->position.y=-1+0.5+i-1;
                 b2FixtureDef* boxDef = new b2FixtureDef();
                 boxDef->shape=&bar;
-                boxDef->density=1;
+                boxDef->density=5;
                 boxDef->friction=0.5;
                 boxDef->restitution=0.2;
                 boxDef->filter.groupIndex = -1;
@@ -1019,74 +1085,19 @@
                 link=body;
             }
 
-             // final body
+			/*! Variable - weld joint
+             * \n linking elevator box and chain
+             */ 
             weld_joint->Initialize(box1, link, b2Vec2(0, 20));
             m_world->CreateJoint(weld_joint); 
 
         }
 
-        // {      
-        //       /*! Variable - centerCircleDef
-        //        * \n \brief body definition of center circle
-        //        * \n Values - position=(0,32)
-        //        * Data type - b2BodyDef
-        //        */ 
-        //        b2BodyDef centerCircleDef;
-        //        centerCircleDef.type = b2_dynamicBody;
-        //        centerCircleDef.position.Set(-30,3);
-        //        b2Body* centreCircle = m_world->CreateBody(&centerCircleDef);
-        //        centerCircleDef.type = b2_dynamicBody;       
-        //        b2Body* nail = m_world->CreateBody(&centerCircleDef);
-
-        //       /*! Variable - circleShape
-        //        * \n \brief shape for center circle
-        //        * \n Values - position=(0,0)
-        //        * \n Data Type - b2CircleShape
-        //        */
-        //        b2CircleShape circleShape;
-        //        circleShape.m_p.Set(0, 0); 
-        //        circleShape.m_radius = 1.f; 
-               
-        //       /*! Variable - centerCircleFixtureDef
-        //        * \n \brief fixture for center circle
-        //        * \n Values - density=1.0f 
-        //        * \n Data Type - b2FixtureDef
-        //        */
-        //        b2FixtureDef centerCircleFixtureDef;
-        //        centerCircleFixtureDef.shape = &circleShape;
-        //        centerCircleFixtureDef.density = 1.0f;
-        //        centreCircle->CreateFixture(&centerCircleFixtureDef);
-
-        //        circleShape.m_radius = 0.5f;
-        //        centerCircleFixtureDef.shape = &circleShape;
-        //        nail->CreateFixture(&centerCircleFixtureDef);
-
-        //        /*! Variable - circleToWorldJointDef
-        //         * \n \brief revolute joint between center circle and elevator box
-        //         * \n Values - enable motor , collide connect , max motor torque , motor speed
-        //         * \n Data Type - b2CircleShape
-        //         */
-        //        b2RevoluteJointDef circleToWorldJointDef;
-        //        circleToWorldJointDef.bodyA = centreCircle;
-        //        circleToWorldJointDef.bodyB = nail;
-        //        circleToWorldJointDef.collideConnected = false;
-        //        circleToWorldJointDef.enableMotor = true;
-        //        circleToWorldJointDef.maxMotorTorque = 1000;
-        //        circleToWorldJointDef.motorSpeed = 0;
-
-        //        circleToWorldJointDef.localAnchorA.Set(0,0);
-        //        circleToWorldJointDef.localAnchorB.Set(0,0);
-        //        b2RevoluteJoint* circleToWorldJoint2 = (b2RevoluteJoint *)m_world->CreateJoint(&circleToWorldJointDef);
-
-        //        b2WeldJointDef* weld_joint = new b2WeldJointDef;
-        //        weld_joint->Initialize(box2, nail, b2Vec2(-30, 2));
-        //        m_world->CreateJoint(weld_joint); 
-        //   }       
-
+           
           {      
               /*! Variable - centerCircleDef
-               * \n \brief body definition of center circle
-               * \n Values - position=(0,32)
+               * \n \brief body definition of disc at bottom of frame
+               * \n Values - position=(-28.5,-0)
                * Data type - b2BodyDef
                */ 
                b2BodyDef centerCircleDef;
@@ -1095,8 +1106,8 @@
                b2Body* nail = m_world->CreateBody(&centerCircleDef);
 
               /*! Variable - circleShape
-               * \n \brief shape for center circle
-               * \n Values - position=(0,0)
+               * \n \brief shape for disc
+               * \n Values - position=(0,0) , radius = 0.8f
                * \n Data Type - b2CircleShape
                */
                b2CircleShape circleShape;
@@ -1104,7 +1115,7 @@
                circleShape.m_radius = 0.8f;
                
               /*! Variable - centerCircleFixtureDef
-               * \n \brief fixture for center circle
+               * \n \brief fixture for disc
                * \n Values - density=1.0f 
                * \n Data Type - b2FixtureDef
                */
@@ -1117,8 +1128,8 @@
 
          {      
             /*! Variable - centerCircleDef
-             * \n \brief body definition of center circle
-             * \n Values - position=(0,32)
+             * \n \brief body definition of another disc
+             * \n Values - position=(-1.5,-0)
              * Data type - b2BodyDef
              */ 
              b2BodyDef centerCircleDef;
@@ -1127,8 +1138,8 @@
              b2Body* nail = m_world->CreateBody(&centerCircleDef);
 
             /*! Variable - circleShape
-             * \n \brief shape for center circle
-             * \n Values - position=(0,0)
+             * \n \brief shape for another disc
+             * \n Values - position=(0,0) , radius = 0.8f
              * \n Data Type - b2CircleShape
              */
              b2CircleShape circleShape;
@@ -1136,7 +1147,7 @@
              circleShape.m_radius = 0.8f;
              
             /*! Variable - centerCircleFixtureDef
-             * \n \brief fixture for center circle
+             * \n \brief fixture for another disc
              * \n Values - density=1.0f 
              * \n Data Type - b2FixtureDef
              */
@@ -1159,7 +1170,8 @@ b2WeldJoint *tempJoint;
  */
 void dominos_t::keyboard(unsigned char key) 
 {   
-
+ /*! key 'd' is used to descent elevator
+  */ 
 if(key == 'd'){    
   if(doorBody->GetWorldCenter().x > 0.85){
     circleToWorldJoint->SetMotorSpeed(0);
@@ -1168,7 +1180,8 @@ if(key == 'd'){
     prismaticJoint->EnableMotor(true);
   }
 }
-
+ /*! key 'a' is used to descent elevator
+  */ 
 else if(key == 'a'){    
   if(doorBody->GetWorldCenter().x > 0.85){
     if((box1->GetPosition()).y < 25) box1->SetType(b2_dynamicBody);   
@@ -1177,14 +1190,18 @@ else if(key == 'a'){
     prismaticJoint->EnableMotor(true);
   }
 }
-
+  /*! key 'c' is used to cut the rope of elevator
+  */ 
 else if(key == 'c'){
     prismaticJoint->EnableMotor(false);
+   
     circleToWorldJoint->SetMotorSpeed(0);
     box1->SetType(b2_dynamicBody);  
     box2->GetWorld()->DestroyBody(box2); 
+    link->GetWorld()->DestroyBody(link); 
 }
-
+  /*! key 'l' is used to open the door 
+  */ 
 else if(key == 'l'){    
   if(((box1->GetWorldCenter()).y >= 25) || ((box1->GetWorldCenter()).y <= 10)){
     start = true;

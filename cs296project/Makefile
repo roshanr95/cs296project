@@ -69,7 +69,7 @@ setup:
 	@$(ECHO) "Setting up compilation..."
 	@mkdir -p $(OBJDIR)
 	@mkdir -p $(BINDIR)
-	@if test -d $(EXTERNAL_ROOT)/src/Box2D/build_296; \
+	@if test -d $(EXTERNAL_ROOT)/lib/Box2D; \
 	then $(ECHO) ""; \
 	else tar xvzf $(EXTERNAL_ROOT)/src/Box2D.tgz -C $(EXTERNAL_ROOT)/src	\
 	&& mkdir -p $(EXTERNAL_ROOT)/src/Box2D/build_296; \
@@ -119,7 +119,7 @@ html:
 
 clean:
 	@$(ECHO) -n "Cleaning up..."
-	@$(RM) -rf $(OBJDIR) *~ $(DEPS) $(SRCDIR)/*~
+	@$(RM) -rf $(OBJDIR) *~ $(DEPS) $(SRCDIR)/*~ 
 	@$(ECHO) "Done"
 
 distclean: clean
