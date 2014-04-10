@@ -114,6 +114,9 @@ latex:
 	dvipdf g05_report; \
 	rm -f g05_report.bbl g05_report.log g05_report.aux g05_report.blg g05_report.dvi
 
+html:
+	@python3 ./scripts/g05_gen_html.py
+
 clean:
 	@$(ECHO) -n "Cleaning up..."
 	@$(RM) -rf $(OBJDIR) *~ $(DEPS) $(SRCDIR)/*~
