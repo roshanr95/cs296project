@@ -30,7 +30,10 @@
 
 With sturdy metal beams as their building blocks, architects and engineers could erect monumental skyscrapers hundreds of feet in the air. But these towers would have been basically unusable if it weren't for another technological innovation that came along around the same time. Modern elevators are the crucial element that makes it practical to live and work dozens of stories above ground. Even in smaller multi-story buildings, elevators are essential for making offices and apartments accessible to handicapped people.
 
-But this did not make elevators popular or worthwile. In 1853, American inventor Elisha Otis demonstrated a freight elevator equipped with a safety device to prevent falling in case a supporting cable should break. This increased public confidence in such devices. In 1853, Elisha Otis established a company for manufacturing elevators and patented (1861) a steam elevator. While, Elisha Graves Otis did not actually invent the first elevator, he did invent the brake used in modern elevators, and his brakes made skyscrapers a practical reality. His design was a purely mechanical masterpiece.
+But this did not make elevators popular or worthwile. In 1853, American inventor Elisha Otis demonstrated a freight elevator equipped with a safety device to prevent falling in case a supporting cable should break. This increased public confidence in such devices. In 1853, Elisha Otis established a company for manufacturing elevators and patented (1861) a steam elevator. While, Elisha Graves Otis did not actually invent the first elevator, he did invent the brake used in modern elevators, and his brakes made skyscrapers a practical reality. His design was a purely mechanical masterpiece.\\
+
+We have aimed to replicate this original design not just in essence, but with all the elements which made it viable.
+In this project we have not just explained how these ubiquitous machines move you from floor to floor. We have aimed to create a realistic and practical instance of a working machine that can be deployed for use. For this, we'll also look at the control systems that decide where the elevator goes and the safety systems that prevent catastrophes.	
 
 We have aimed to replicate this original design not just in essence, but with all the elements which made it viable.
 In this project we have not just explained how these ubiquitous machines move you from floor to floor. We have aimed to create a realistic and practical instance of a working machine that can be deployed for use. For this, we'll also look at the control systems that decide where the elevator goes and the safety systems that prevent catastrophes.	
@@ -105,11 +108,16 @@ We have an interface consisting of an instruction set and certain keyboard butto
 Instructions are as follows:
 
 \begin{tabular}{l l l}
-& 1. & d: Lift descends to the lower level, if ther is any and the doors get locked \\
-& 2. & a: Lift ascends to the just higher level and the doors get locked\\
-& 3. & l: Lift gets locked in position and the door slides opens\\
+& 1. & d: Lift descends to the lower level, if there is any, and the doors get locked. This works only if the doors are closed. \\
+& 2. & a: Lift ascends to the just higher level and the doors get locked. This works only if the doors are closed. \\
+& 3. & l: Lift gets locked in position and the door slides opens. This will occur only if the lift is at some floor.\\
 & 4. & c: Caution. The elevator thread gets cut!\\
+
 \end{tabular}
+
+A major challenge in our project was to increase the stability of the system. The elevator and counterweight used to bounce violently when the elevator stopped after some motion. Also, the safety mechanism gave a violent jerk when we suddenly applied a powerful brake to the system. We prevented this by constraining the motion of the machine using joint limits and by varying the weights of the different bodies involved.
+
+Also, there is a computer system involved in most elevators which controls the movement of the machine. For example, the elevator box must precisely stop at a particular floor and not in between. 
 
 In a relatively short period of time, elevators have become an essential machine. As people continue to erect monumental skyscrapers and more small buildings are made handicap-accessible, elevators will become an even more pervasive element in society. 
 
@@ -124,7 +132,8 @@ The following part of the report is an attempt to analyse and profile Box2D code
 
 \section{Graphically plotting time using GNUplot}
 Timig and profiling our code was a challenge as our code behaves differently and responds to diferent keyboard commands. We overcame this by creating versions of our code which execute certain commands by default and then trying to put together the pieces by analysing all the seperate plots that we generated. This was done by making variables global and then imposing conditions on them inside the step function of the Box2D code. 
-We plotted five graphs using data obtained from four functions of the code. The code was run for values of iteration ranging from 1 to 1500 and the values were averaged over 150 reruns for each iteration value. Here are our observations based on individual graphs. 
+
+We plotted five graphs using data obtained from four functions of the code. The code was run for values of iteration ranging from 1 to 500 and the values were averaged over 15 reruns for each iteration value. Here are our observations based on individual graphs. 
 
 \subsection{Average step time and Loop time vs Iteration values}
 
@@ -134,7 +143,6 @@ We plotted five graphs using data obtained from four functions of the code. The 
 
 The histogram of the average step time shows that the average step times decrease continuously with increase in number of iteration values.This implies that the later steps take lesser aount of time as compared to the initial few iterations. this is consistent with our expectations as the earlier steps involve declaration and initialisation of a large number of objects.
 The average step times are dominated by the loop times. The total loop times increase almost linearly with iteration values. As the individual loop times are in the same range, the cumulative or total loop times are continuous and linearly increasing.   
-However the nature of the graph changes at around the 1000th iteration. This is because the action of the elevator also changes. It moves from descend to lock state.
 
 \subsection{Average step time and collision, velocity, position update time vs Iteration values}
 
@@ -151,9 +159,9 @@ This is a line graph used for comparison between the different functions involve
 
 \end{itemize}
 
-All the functions follow the same general pattern. The average times decrease steeply with increase in iteration values initially. Later, the average times settle down to almost constant values. They then spike up again at about the 1000'th iteration.
+All the functions follow the same general pattern. The average times decrease steeply with increase in iteration values initially. Later, the average times settle down to almost constant values. 
 
-There is a dip around the iteration value 200. The shape of the average values will depend on the simulation. for example at the 200'th iteration, there might be a collision in the simulation. this will lead to an increase in moving parts and increase in calculations.\\
+There is a dip around the iteration value 200. The shape of the average values will depend on the simulation. For example, at the 200'th iteration, there might be a collision in the simulation. this will lead to an increase in moving parts and increase in calculations.\\
 
 There are spikes in the graph representing anomalies. These are bad iterations. These spikes decrease in intensity with increase in iteration values as the anomalies get averaged out. 
 
@@ -174,7 +182,7 @@ A significant trend is that anamolous points tend to take higher rather than low
 \includegraphics[width=0.6\textwidth]{plots/g05_plot05.eps} 
 \end{center}
 
-The best fit lines of the random and total values denote the closeness between the two values. Contrary to the earlier graph, this graph highlights the predictability of the step times. We have taken 15 random values out of a possible 150 and that can simulate the system to a high degree of accuracy.
+The best fit lines of the random and total values denote the closeness between the two values. Contrary to the earlier graph, this graph highlights the predictability of the step times. We have taken 10 random values out of a possible 15 and that can simulate the system to a high degree of accuracy.
 
 \section{Analysing the effect of system processes}
 
@@ -221,22 +229,6 @@ Also, a lot of time is used by the libm math library which is fairly obvious giv
 
 The time taken by the release build is three to four times the time taken by the debug build. Here is a sample of the code executed first as a release build and then as a debug build. The times vary substantially.
 
-Number of Iterations: 10000\\
-Average time per step is 0.044078 ms\\
-Average time for collisions is 0.003695 ms\\
-Average time for velocity updates is 0.0144011 ms\\
-Average time for position updates is 0.00714392 ms\\
-
-Total loop time is 1056.6 ms\\
-
-Number of Iterations: 10000\\
-Average time per step is 0.265013 ms\\
-Average time for collisions is 0.0199994 ms\\
-Average time for velocity updates is 0.112012 ms\\
-Average time for position updates is 0.0297173 ms\\
-
-Total loop time is 3448.04 ms\\
-
 \subsection{Optimisation}
 Due to the difference in debug and release times we see that certain functions can be made more effecient.
 From the graph we observed that, the following functions take up lot of time and can possibly be optimized:
@@ -248,6 +240,18 @@ From the graph we observed that, the following functions take up lot of time and
 \item operator-()
 \item operator*()
 \end{enumerate}
+
+The big indicator of effeciency for our code are the collision times in the simulation. Our project required that the device be smooth and to not have unneseccary collisions. We went about this in the folllowing manner :
+
+1. Better use of joints. 
+The frame of the elevator and counterweight that we have designed can by itself support and maintain the elevator box in a vertical position. However, it was leading to wastefdul calculations. We added a prismatic joint to both these frames and reduced the number of collisions. 
+A major block in the simulation is that the elevator box used to bounce or vibrate after we tried to hold it still on reaching a particular floor. We realised that fixing the elevator using a collision with another body was not a great idea as Box2D would involve itself in complex force and position calculations. Further, due to the timestep of the Box2D step function, the parameters after a collision are approximated to some degree. We observed that using the limits of a prismatic joint handled this job far better. 
+
+2. Reducing unecessary bodies
+Some bodies become irrelevant in a Box2D simulation as they can be replaced by Box2D feature. For example a motor can be replaced by the motor of a joint. Also, a rod holding together two objects can be replaced by a weld joint. We have tried to reduce the superfluous elements in our simulation.
+
+3. Setting proper parameter values
+We noted that Box2D could not easily handle bodies with very low densities. Their behavior with respect to joints and collisions was not proper and led to wild swings in behavior. This increased our calculations as the system oscillated violently about some wrong value. Also, the collisions in Box2D were not completely inelastic. This meant that the simulation took a lot of calculations to get to the rest stae. We modified the values of our parameters, for example, we scales up our body masses or scaled down our distances to reduce the perturbations in the system. 
 
 To optimise it further, the constraint solving module of the Box2D library can be improved. Better equations and asynchronous procedures can be devised to reduce the time required to solve constraints/collisions. The math operations on vectors can be improved by making use of parallelisation features like SIMD. Also, some computation can be moved to the GPU and run parallel to the CPU.
 

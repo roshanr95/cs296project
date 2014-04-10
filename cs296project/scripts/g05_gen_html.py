@@ -67,10 +67,25 @@ for section in sections[1:] :
 		lines = lines[1:]
 		writep(lines)
 
-# bibtexfile = open("./doc/bibtex.bib", "r")
-# bib = bibtexfile.read()
+bibtexfile = open("./doc/bibtex.bib", "r")
+bib = bibtexfile.read()
+bib = bib.split('@misc')[1:]
 
-# bib = bib.decode('utf-8')
+htmlfile.write('<h1>References</h1>\n')
+htmlfile.write('<ul>\n')
 
-# print(bib)
+for entry in bib :
+	entry = entry.split('"')
+	htmlfile.write('<li><a href="')
+	temp = entry[5].split('{')[1];
+	temp = temp.split('}')[0];
+	htmlfile.write(temp + '">' + entry[3] + '</a></li>\n')
+	# print(entry)
+# htmlfile.write('<li><a href="http://www.box2d.org/manual.html">Box2D Manual<\a><\li>\n')
+# htmlfile.write('<li>http://www.box2d.org/documentation.html - Box2D Documentation<\li>\n')
+# htmlfile.write('<li><\li>\n')
+# htmlfile.write('<li><\li>\n')
+# htmlfile.write('<li><\li>\n')
+# htmlfile.write('<li><\li>\n')
+# htmlfile.write('</ul>\n')
 		
