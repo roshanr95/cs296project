@@ -21,6 +21,9 @@
 using namespace std;
 using namespace cs296;
 
+extern b2Body *doorBody; 
+extern b2RevoluteJoint* circleToWorldJoint;
+extern bool start;
 
 base_sim_t::base_sim_t()
 {
@@ -87,6 +90,9 @@ void base_sim_t::draw_title(int x, int y, const char *string)
 
 void base_sim_t::step(settings_t* settings)
 {
+
+  //m_debug_draw.DrawMyString(" Instructions", "d : Lift descends to lower level", "a: Lift ascends to higher level", "l: Lift gets locked and the door opens", "c: Thread gets cut!");
+
   float32 time_step = settings->hz > 0.0f ? 1.0f / settings->hz : float32(0.0f);
 
   if (settings->pause)
@@ -244,4 +250,11 @@ void base_sim_t::step(settings_t* settings)
 	    }
 	}
     }
-}
+
+    if((doorBody->GetWorldCenter().x > 0.85) && !start){  
+        circleToWorldJoint->SetMotorSpeed(0);
+      }
+
+     if(doorBody->GetWorldCenter().x < 0) start = false;
+      
+    } 

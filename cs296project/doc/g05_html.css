@@ -1,0 +1,8 @@
+body,html{ margin-top: 0px;margin-left: 0px;margin-right: 0px; 
+	margin-bottom: 20px; background-color:#DCDCDC; text-align: center}
+
+ul,p{margin: 0px; margin-left: 20px;margin-right: 20px; font-family:Arial;font-size: 20px; text-align: left;}
+
+h1 { background-color:black;font-size:40;margin:0px; margin-top: 20px; margin-bottom:0px; color:#FFE4C4;font-family:Georgia; text-align: center; }
+
+h2 {background-color:black;font-size:30;margin:0px;margin-bottom:0px;color:#FFE4C4;font-family:Georgia; text-align: center;}

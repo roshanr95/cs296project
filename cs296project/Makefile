@@ -25,11 +25,11 @@ DOCDIR = $(PROJECT_ROOT)/doc
 
 # Library Paths
 BOX2D_ROOT=$(EXTERNAL_ROOT)
-GLUI_ROOT=/usr/local
+GLUI_ROOT=/usr/
 GL_ROOT=/usr/include/
 
 #Libraries
-LIBS = -lBox2D -lglui -framework glut -framework OpenGL
+LIBS = -lBox2D -lglui -lglut -lGLU -lGL
 
 # Compiler and Linker flags
 CPPFLAGS =-g -O3 -Wall -fno-strict-aliasing
@@ -69,7 +69,7 @@ setup:
 	@$(ECHO) "Setting up compilation..."
 	@mkdir -p $(OBJDIR)
 	@mkdir -p $(BINDIR)
-	@if test -d $(EXTERNAL_ROOT)/src/Box2D/build_296; \
+	@if test -d $(EXTERNAL_ROOT)/lib/Box2D; \
 	then $(ECHO) ""; \
 	else tar xvzf $(EXTERNAL_ROOT)/src/Box2D.tgz -C $(EXTERNAL_ROOT)/src	\
 	&& mkdir -p $(EXTERNAL_ROOT)/src/Box2D/build_296; \
@@ -109,13 +109,21 @@ doc:
 	@$(DOXYGEN) $(DOCDIR)/Doxyfile 2 > /dev/null
 	@$(ECHO) "Done"
 
+latex:
+	@cd doc; latex g05_report; bibtex g05_report; latex g05_report; latex g05_report; \
+	dvipdf g05_report; \
+	rm -f g05_report.bbl g05_report.log g05_report.aux g05_report.blg g05_report.dvi
+
+html:
+	@python3 ./scripts/g05_gen_html.py
+
 clean:
 	@$(ECHO) -n "Cleaning up..."
-	@$(RM) -rf $(OBJDIR) *~ $(DEPS) $(SRCDIR)/*~
+	@$(RM) -rf $(OBJDIR) *~ $(DEPS) $(SRCDIR)/*~ 
 	@$(ECHO) "Done"
 
 distclean: clean
-	@$(RM) -rf $(BINDIR) $(DOCDIR)/html
+	@$(RM) -rf $(BINDIR) $(DOCDIR)/html $(DOCDIR)/g05_report.pdf
 	@$(RM) -rf $(EXTERNAL_ROOT)/include/*
 	@$(RM) -rf $(EXTERNAL_ROOT)/lib/*
 	@$(RM) -rf $(EXTERNAL_ROOT)/src/Box2D
