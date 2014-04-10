@@ -150,6 +150,10 @@ namespace cs296
       B2_NOT_USED(impulse);
     }
 
+    virtual b2World * getWorld() {
+      return m_world;
+    }
+
   //!How are protected members different from private memebers of a class in C++ ?
   protected:
 
