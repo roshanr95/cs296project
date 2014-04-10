@@ -109,6 +109,11 @@ doc:
 	@$(DOXYGEN) $(DOCDIR)/Doxyfile 2 > /dev/null
 	@$(ECHO) "Done"
 
+latex:
+	@cd doc; latex g05_report; bibtex g05_report; latex g05_report; latex g05_report; \
+	dvipdf g05_report; \
+	rm -f g05_report.bbl g05_report.log g05_report.aux g05_report.blg g05_report.dvi
+
 clean:
 	@$(ECHO) -n "Cleaning up..."
 	@$(RM) -rf $(OBJDIR) *~ $(DEPS) $(SRCDIR)/*~
