@@ -25,11 +25,11 @@ DOCDIR = $(PROJECT_ROOT)/doc
 
 # Library Paths
 BOX2D_ROOT=$(EXTERNAL_ROOT)
-GLUI_ROOT=/usr/local
+GLUI_ROOT=/usr/
 GL_ROOT=/usr/include/
 
 #Libraries
-LIBS = -lBox2D -lglui -framework glut -framework OpenGL
+LIBS = -lBox2D -lglui -lglut -lGLU -lGL
 
 # Compiler and Linker flags
 CPPFLAGS =-g -O3 -Wall -fno-strict-aliasing
@@ -123,7 +123,7 @@ clean:
 	@$(ECHO) "Done"
 
 distclean: clean
-	@$(RM) -rf $(BINDIR) $(DOCDIR)/html
+	@$(RM) -rf $(BINDIR) $(DOCDIR)/html $(DOCDIR)/g05_report.pdf
 	@$(RM) -rf $(EXTERNAL_ROOT)/include/*
 	@$(RM) -rf $(EXTERNAL_ROOT)/lib/*
 	@$(RM) -rf $(EXTERNAL_ROOT)/src/Box2D
